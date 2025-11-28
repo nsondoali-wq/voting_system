@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Voting System | Engineering Training Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #ea580c;
+            --accent: #dc2626;
+            --success: #059669;
+            --warning: #d97706;
+            --error: #dc2626;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --industrial-blue: #1e40af;
+            --industrial-orange: #ea580c;
+            --industrial-gray: #475569;
+            --radius: 10px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Slideshow Background */
+        .slideshow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+          
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 0;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--industrial-blue), var(--primary-dark));
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--industrial-blue), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 8px 0;
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--industrial-blue);
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--industrial-blue);
+        }
+
+        nav a:hover:after {
+            width: 100%;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary {
+            background: var(--industrial-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--industrial-orange);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #c2410c;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Hero Section */
+        .hero {
+            color: white;
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 36px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Steps Section */
+        .steps {
+            padding: 100px 0;
+            background: #f8fafc;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 40px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            margin-bottom: 60px;
+            color: var(--industrial-gray);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .step-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .step-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--industrial-blue), var(--industrial-orange));
+        }
+
+        .step-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .step-card i {
+            font-size: 40px;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--industrial-blue), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .step-card h3 {
+            font-size: 22px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .step-card p {
+            color: var(--industrial-gray);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            text-align: center;
+            background: white;
+        }
+
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-card i {
+            font-size: 40px;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--industrial-orange), #c2410c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--industrial-gray);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--industrial-blue), var(--primary-dark));
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNwYXR0ZXJuKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==');
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .cta p {
+            font-size: 18px;
+            margin-bottom: 36px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 80px 0 30px;
+        }
+
+        footer a {
+            color: white;
+            transition: var(--transition);
+        }
+
+        footer a:hover {
+            color: var(--industrial-orange);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 24px;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--industrial-orange);
+        }
+
+        .footer-column p {
+            margin-bottom: 16px;
+            opacity: 0.8;
+            line-height: 1.7;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 12px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media(max-width: 992px) {
+            .hero h1 { font-size: 42px; }
+            .section-title { font-size: 34px; }
+        }
+
+        @media(max-width: 768px) {
+            .hero { padding: 80px 0; }
+            .hero h1 { font-size: 36px; }
+            .steps, .features, .cta { padding: 80px 0; }
+            .section-title { font-size: 30px; }
+            .section-subtitle { font-size: 16px; }
+            nav ul { gap: 20px; }
+        }
+
+        @media(max-width: 576px) {
+            .hero h1 { font-size: 32px; }
+            .hero p, .cta p { font-size: 16px; }
+            .section-title { font-size: 26px; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .hero-buttons .btn { width: 100%; max-width: 280px; }
+            .footer-grid { gap: 40px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Slideshow -->
+    <div class="slideshow-container">
+        <div class="slide active" style="background-image: url('./images/vote-5676562_1280.jpg')">
+            <div class="slide-overlay"></div>
+        </div>
+        <div class="slide" style="background-image: url('./images/vote1.png')">
+            <div class="slide-overlay"></div>
+        </div>
+        <div class="slide" style="background-image: url('./images/INDUSTRIAL.jpg')"
+            <div class="slide-overlay"></div>
+        </div>
+        <div class="slide" style="background-image: url('./images/ballot-box-.png')">
+            <div class="slide-overlay"></div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-vote-yea"></i></div>
+                <div class="logo-text">Online Voting System</div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#steps">How It Works</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#cta">Get Started</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="container hero-content">
+            <h1>Secure & Easy College Elections</h1>
+            <p>Welcome to the Advanced Engineering Training Center Online Voting System. Cast your vote safely and securely from anywhere, whether you are a new or returning student.</p>
+            <div class="hero-buttons">
+                <a href="register.html" class="btn btn-secondary"><i class="fas fa-user-plus"></i> New Students</a>
+                <a href="login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Returning Students</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="steps" id="steps">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Our streamlined process ensures a secure and efficient voting experience for all students</p>
+            <div class="step-cards">
+                <div class="step-card">
+                    <i class="fas fa-user-plus"></i>
+                    <h3>Register</h3>
+                    <p>New students create an account using their student ID and email to participate in elections.</p>
+                </div>
+                <div class="step-card">
+                    <i class="fas fa-id-card"></i>
+                    <h3>Verify Identity</h3>
+                    <p>Ensure your eligibility to vote through our secure verification process.</p>
+                </div>
+                <div class="step-card">
+                    <i class="fas fa-vote-yea"></i>
+                    <h3>Vote</h3>
+                    <p>Select your preferred candidates for your department or student council positions.</p>
+                </div>
+                <div class="step-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Track Results</h3>
+                    <p>Monitor election results in real-time once voting concludes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <p class="section-subtitle">Our voting system is designed with security, accessibility, and transparency in mind</p>
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <i class="fas fa-lock"></i>
+                    <h3>Secure Voting</h3>
+                    <p>All votes are encrypted ensuring transparency and trust in the system.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile Friendly</h3>
+                    <p>Vote from any device – desktop, tablet, or smartphone.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Easy Access</h3>
+                    <p>Simple interface for both new and returning students to navigate easily.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <h3>Instant Results</h3>
+                    <p>Election results are updated in real-time after voting concludes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="cta">
+        <div class="container cta-content">
+            <h2>Ready to Cast Your Vote?</h2>
+            <p>Whether you are a new student or returning, start your voting experience now!</p>
+            <div class="hero-buttons">
+                <a href="register.html" class="btn btn-secondary"><i class="fas fa-user-plus"></i> Register Now</a>
+                <a href="login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Login to Vote</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>About</h3>
+                    <p>Official Online Voting System for Advanced Engineering Training Center College Elections.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">How-to Guide</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p>Email: nsondoali@gmail.com</p>
+                    <p>Phone: +260 977360672</p>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 Advanced Engineering Training Center. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Background Slideshow Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            function showSlide(n) {
+                slides.forEach(slide => slide.classList.remove('active'));
+                currentSlide = (n + slides.length) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }
+            
+            function nextSlide() {
+                showSlide(currentSlide + 1);
+            }
+            
+            // Change slide every 5 seconds
+            setInterval(nextSlide, 5000);
+            
+            // Initialize the first slide
+            showSlide(0);
+        });
+    </script>
+</body>
+</html>

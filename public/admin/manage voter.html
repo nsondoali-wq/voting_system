@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Manage Voters</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+    }
+
+    .voter-container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      width: 95%;
+      max-width: 1000px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      color: #fff;
+      text-align: center;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .button-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .button-grid a {
+      text-decoration: none;
+    }
+
+    button {
+      padding: 14px 24px;
+      background-color: #fff;
+      color: #2980b9;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+      min-width: 180px;
+      margin: 2px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+      color: #fff;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin: 10px 5px;
+      width: 200px;
+    }
+
+    table {
+      margin: 20px auto;
+      width: 90%;
+      color: #fff;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="voter-container">
+    <h2>Manage Voters</h2>
+
+    <form method="POST" action="/voters/add">
+      <input type="text" name="voter_name" placeholder="Voter Name" required />
+      <input type="text" name="voter_id" placeholder="Voter ID" required />
+      <button type="submit">Add Voter</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr><th>Name</th><th>ID</th><th>Action</th></tr>
+      </thead>
+      <tbody id="voterTableBody">
+        <!-- Voter rows will be injected here -->
+      </tbody>
+    </table>
+
+    <div class="button-grid">
+      <a href="admin-dashboard.html"><button>Back to Dashboard</button></a>
+    </div>
+  </div>
+
+  <script>
+    // Optional: fetch and display voters dynamically
+    fetch('/voters')
+      .then(res => res.json())
+      .then(voters => {
+        const tbody = document.getElementById('voterTableBody');
+        voters.forEach(voter => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${voter.name}</td>
+            <td>${voter.voter_id}</td>
+            <td>
+              <form action="/voters/delete" method="POST" style="display:inline;">
+                <input type="hidden" name="id" value="${voter.id}" />
+                <button type="submit">Delete</button>
+              </form>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      })
+      .catch(err => console.error('Error loading voters:', err));
+  </script>
+</body>
+</html>

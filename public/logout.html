@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Logging Out | Voting System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      color: #fff;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .logout-box {
+      background: rgba(0, 0, 0, 0.45);
+      padding: 35px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="logout-box">
+  <h1>Logout Confirmation</h1>
+  <p>Click below to confirm your logout.</p>
+</div>
+
+<script>
+  // Fetch logged-in user info first
+  fetch('/api/user')
+    .then(res => {
+      if (!res.ok) throw new Error('Not logged in');
+      return res.json();
+    })
+    .then(data => {
+      const user = data.user;
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to logout?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Logout",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6"
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          Swal.fire({
+            title: "Logging Out...",
+            text: "Please wait...",
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+          });
+
+          fetch('/logout')
+            .finally(() => {
+              setTimeout(() => {
+                window.location.href = '/login.html';
+              }, 1500);
+            });
+
+        } else {
+          // Cancel → redirect based on role
+          if (user.role === 'admin') {
+            window.location.href = 'admin/admin_dashboard.html';
+          } else if (user.role === 'voter') {
+            window.location.href = '/voter_dashboard.html';
+          } else {
+            window.location.href = '/login.html';
+          }
+        }
+      });
+    })
+    .catch(() => {
+      // Not logged in → redirect to login
+      window.location.href = '/login.html';
+    });
+</script>
+
+</body>
+</html>

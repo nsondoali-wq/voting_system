@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Dashboard | Voting System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+            background-image: url('/images/brick flag.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+    }
+
+    .dashboard {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 1000px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      color: #fff;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 30px;
+      font-size: 1rem;
+    }
+
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .link {
+      background-color: #fff;
+      color: #00796b;
+      padding: 16px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 200px;
+      transition: 0.3s ease;
+    }
+
+    .link i {
+      font-size: 1.2rem;
+    }
+
+    .link:hover {
+      background-color: #00796b;
+      color: #fff;
+    }
+
+    @media (max-width: 600px) {
+      .link {
+        min-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2>Voting Portal</h2>
+    <p id="welcomeText">Welcome, <strong>User</strong> | Role: <strong>Role</strong></p>
+
+    <div class="grid">
+      <a href="view_candidates.html" class="link">
+        <i class="fas fa-users"></i> View Candidates
+      </a>
+
+      <a href="vote.html" class="link role-student">
+        <i class="fas fa-vote-yea"></i> Vote Now
+      </a>
+
+      <a href="vote_status.html" class="link role-student">
+        <i class="fas fa-check-circle"></i> My Vote Status
+      </a>
+
+      <a href="results.html" class="link">
+        <i class="fas fa-chart-pie"></i> View Results
+      </a>
+
+      <a href="/voter/vote_statist.html" class="link role-lecturer">
+        <i class="fas fa-chart-line"></i> Voter Statistics
+      </a>
+
+      <a href="logout.html" class="link">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Simulated logged-in user data
+    const user = {
+      name: "EMMANUEL",
+      role: "lecturer" // Changed from "student" to "lecturer"
+    };
+
+    // Update welcome message
+    document.getElementById('welcomeText').innerHTML =
+      `Welcome, <strong>${user.name}</strong> | Role: <strong>${user.role.charAt(0).toUpperCase() + user.role.slice(1)}</strong>`;
+
+    // Show/hide elements based on role
+    document.querySelectorAll('.role-student').forEach(el => {
+      el.style.display = user.role === "student" ? "inline-flex" : "none";
+    });
+
+    document.querySelectorAll('.role-lecturer').forEach(el => {
+      el.style.display = user.role === "lecturer" ? "inline-flex" : "none";
+    });
+  </script>
+</body>
+</html>

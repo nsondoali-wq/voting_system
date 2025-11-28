@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Voting System - Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+/* Base Styles */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background: linear-gradient(135deg,#1a2a6c,#b21f1f,#fdbb2d); min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px; overflow-x:hidden; }
+.container { display:flex; max-width:1000px; width:100%; background:rgba(255,255,255,0.95); border-radius:20px; box-shadow:0 15px 30px rgba(0,0,0,0.2); overflow:hidden; position:relative; z-index:1; }
+.welcome-section { flex:1; background:linear-gradient(to bottom right,#4facfe,#00c6ff); color:white; padding:40px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
+.welcome-section::before { content:""; position:absolute; top:0; left:0; right:0; bottom:0; background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,192C1248,192,1344,128,1392,96L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>'); background-size:cover; opacity:0.2; }
+.welcome-section h1 { font-size:2.5rem; margin-bottom:20px; position:relative; z-index:1; }
+.welcome-section p { font-size:1.1rem; line-height:1.6; margin-bottom:30px; position:relative; z-index:1; }
+.features { list-style:none; position:relative; z-index:1; }
+.features li { margin-bottom:15px; display:flex; align-items:center; }
+.features i { margin-right:10px; font-size:1.2rem; }
+.login-section { flex:1; padding:40px; display:flex; flex-direction:column; justify-content:center; }
+.login-container { width:100%; }
+h2 { text-align:center; color:#333; margin-bottom:30px; font-size:2rem; }
+form { display:flex; flex-direction:column; position:relative; }
+input[type="text"], input[type="password"], select { width:100%; padding:12px; margin-bottom:20px; border-radius:5px; border:1px solid #ccc; font-size:16px; transition: all 0.3s; }
+input[type="text"]:focus, input[type="password"]:focus, select:focus { border-color:#4facfe; outline:none; box-shadow:0 0 0 3px rgba(79,172,254,0.2); }
+input[type="submit"] { background:#4facfe; color:#fff; border:none; padding:12px; border-radius:5px; cursor:pointer; font-weight:bold; font-size:16px; transition: all 0.3s ease; margin-top:10px; display:flex; justify-content:center; align-items:center; }
+input[type="submit"]:hover { background:#00c6ff; transform:translateY(-2px); box-shadow:0 4px 10px rgba(0,0,0,0.2); }
+.links { text-align:center; margin-top:20px; }
+.links a { color:#4facfe; text-decoration:none; margin:0 10px; font-size:14px; transition: color 0.3s; }
+.links a:hover { color:#00c6ff; text-decoration:underline; }
+/* Password Toggle */
+.password-toggle { cursor:pointer; position:absolute; right:15px; top:50%; transform:translateY(-50%); color:#999; }
+.btn-loading { pointer-events:none; opacity:0.7; }
+/* Responsive */
+@media(max-width:900px){ .container{ flex-direction:column; } .welcome-section{ padding:30px; } }
+@media(max-width:480px){ .welcome-section, .login-section{ padding:20px; } }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="welcome-section">
+        <h1>Secure Voting System</h1>
+        <p>Cast your vote with confidence using our secure and transparent voting platform. Your voice matters in shaping our community's future.</p>
+        <ul class="features">
+            <li><i class="fas fa-shield-alt"></i> Military-grade encryption</li>
+            <li><i class="fas fa-user-check"></i> Identity verification</li>
+            <li><i class="fas fa-clock"></i> Real-time results</li>
+            <li><i class="fas fa-mobile-alt"></i> Mobile-friendly interface</li>
+        </ul>
+    </div>
+
+    <div class="login-section">
+        <div class="login-container">
+            <h2>Login</h2>
+            <form id="loginForm" autocomplete="off">
+                <input type="text" name="username" placeholder="Username" required autocomplete="off">
+                <div style="position: relative;">
+                    <input type="password" name="password" placeholder="Password" required id="password" autocomplete="new-password">
+                    <span class="password-toggle" id="togglePassword"><i class="fas fa-eye"></i></span>
+                </div>
+                <select name="role" required>
+                    <option value="">Select Role</option>
+                    <option value="voter">Voter</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <input type="submit" value="Login" id="loginBtn">
+            </form>
+            <div class="links">
+                <a href="register.html">Register</a>
+                <a href="#" id="forgotPassword">Forgot Password?</a>
+                <a href="home.html">&larr; Back to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const loginForm = document.getElementById('loginForm');
+const loginBtn = document.getElementById('loginBtn');
+const passwordInput = document.getElementById('password');
+const togglePassword = document.getElementById('togglePassword');
+const forgotPassword = document.getElementById('forgotPassword');
+
+// Show/Hide Password
+togglePassword.addEventListener('click', () => {
+    const type = passwordInput.type === 'password' ? 'text' : 'password';
+    passwordInput.type = type;
+    togglePassword.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+});
+
+// Login Submission
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    loginBtn.classList.add('btn-loading');
+    loginBtn.value = 'Logging in...';
+
+    const formData = Object.fromEntries(new FormData(loginForm).entries());
+
+    try {
+        const res = await fetch('/login', {
+            method:'POST',
+            headers:{ 'Content-Type':'application/json' },
+            body: JSON.stringify(formData)
+        });
+        const result = await res.json();
+
+        if(result.success){
+            Swal.fire({
+                icon:'success',
+                title:'Login Successful',
+                text:'Redirecting...',
+                timer:1500,
+                showConfirmButton:false,
+                didClose:()=>window.location.href = result.redirect
+            });
+        } else {
+            Swal.fire({ icon:'error', title:'Login Failed', text:result.message });
+        }
+    } catch(err){
+        Swal.fire({ icon:'error', title:'Error', text:'Server error. Please try again later.' });
+    } finally {
+        loginBtn.classList.remove('btn-loading');
+        loginBtn.value = 'Login';
+    }
+});
+
+// Forgot Password
+forgotPassword.addEventListener('click', () => {
+    Swal.fire({
+        title:'Reset Password',
+        input:'email',
+        inputLabel:'Enter your registered email',
+        inputPlaceholder:'Email address',
+        showCancelButton:true,
+        confirmButtonText:'Send Reset Link',
+        preConfirm: async (email) => {
+            try{
+                const res = await fetch('/forgot-password',{
+                    method:'POST',
+                    headers:{ 'Content-Type':'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await res.json();
+                if(!data.success) throw new Error(data.message);
+                return data;
+            }catch(err){
+                Swal.showValidationMessage(`Error: ${err}`);
+            }
+        }
+    }).then((result)=>{
+        if(result.isConfirmed){
+            Swal.fire('Email Sent!','Check your inbox for the reset link.','success');
+        }
+    });
+});
+
+// Clear form on load
+document.addEventListener('DOMContentLoaded',()=>loginForm.reset());
+</script>
+</body>
+</html>

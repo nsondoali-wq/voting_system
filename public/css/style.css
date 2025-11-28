@@ -1,0 +1,197 @@
+/* General Page Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* Form Submit Button */
+.submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #1d4ed8; /* blue */
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #2563eb;
+}
+
+/* Position Sections */
+.position-section {
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+    padding: 1rem;
+}
+
+.position-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.position-icon {
+    font-size: 2rem;
+    color: #1d4ed8;
+}
+
+.position-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.position-description {
+    margin: 0;
+    color: #555;
+}
+
+/* Candidate Grid */
+.candidate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Candidate Card */
+.candidate-card {
+    background-color: #f1f5f9;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+
+.candidate-card:hover {
+    transform: translateY(-3px);
+}
+
+.candidate-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.candidate-info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.candidate-name {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.candidate-party .party-badge {
+    display: inline-block;
+    background-color: #2563eb;
+    color: #fff;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 0.25rem;
+}
+
+.candidate-tagline {
+    font-style: italic;
+    color: #555;
+    margin: 0.3rem 0 0.8rem 0;
+}
+
+/* Vote Option */
+.vote-option {
+    margin-bottom: 0.8rem;
+}
+
+.vote-radio {
+    margin-right: 0.5rem;
+}
+
+/* Toggle Profile Button */
+.toggle-profile-btn {
+    background: none;
+    border: none;
+    font-weight: 600;
+    color: #1d4ed8;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.toggle-profile-btn .toggle-icon {
+    transition: transform 0.3s ease;
+}
+
+/* Profile Details */
+.profile-details {
+    display: none;
+    margin-top: 0.5rem;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 0.5rem;
+    gap: 0.5rem;
+}
+
+.profile-details.open {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-section {
+    margin-bottom: 0.5rem;
+}
+
+.detail-title {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: #1d4ed8;
+    font-size: 0.95rem;
+}
+
+.detail-content {
+    margin-left: 1.5rem;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.platform-list {
+    padding-left: 1.5rem;
+    margin: 0;
+}
+
+.platform-list li {
+    margin-bottom: 0.3rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .candidate-grid {
+        grid-template-columns: 1fr;
+    }
+}

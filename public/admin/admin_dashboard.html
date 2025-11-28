@@ -1,0 +1,3285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard | Voting System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2d4a80;
+      --primary-dark: #0f1f3d;
+      --accent: #d4af37;
+      --accent-light: #e6c762;
+      --accent-dark: #b8941f;
+      --secondary: #718096;
+      --success: #38a169;
+      --warning: #d69e2e;
+      --danger: #e53e3e;
+      --light: #f7fafc;
+      --dark: #2d3748;
+      --gray-100: #f7fafc;
+      --gray-200: #edf2f7;
+      --gray-300: #e2e8f0;
+      --gray-400: #cbd5e0;
+      --gray-500: #a0aec0;
+      --gray-600: #718096;
+      --gray-700: #4a5568;
+      --gray-800: #2d3748;
+      --gray-900: #1a202c;
+      --border-radius: 12px;
+      --border-radius-lg: 16px;
+      --border-radius-xl: 20px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      --box-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --box-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s ease;
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.18);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(135deg, #0f1f3d 0%, #1a365d 100%);
+      color: var(--light);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 280px;
+      background: rgba(15, 31, 61, 0.85);
+      backdrop-filter: blur(10px);
+      color: white;
+      transition: var(--transition);
+      box-shadow: var(--box-shadow-xl);
+      z-index: 100;
+      border-right: 1px solid var(--glass-border);
+    }
+
+    .sidebar-header {
+      padding: 25px 20px;
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .sidebar-header i {
+      font-size: 28px;
+      color: var(--accent);
+    }
+
+    .sidebar-header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--accent), var(--accent-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sidebar-menu {
+      padding: 25px 0;
+    }
+
+    .menu-item {
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      cursor: pointer;
+      transition: var(--transition);
+      border-left: 4px solid transparent;
+      margin: 5px 15px;
+      border-radius: 8px;
+    }
+
+    .menu-item:hover {
+      background: var(--glass-bg);
+      border-left-color: var(--accent);
+    }
+
+    .menu-item.active {
+      background: var(--glass-bg);
+      border-left-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu-item i {
+      width: 20px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .menu-item span {
+      font-weight: 500;
+    }
+
+    /* Main Content Styles */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--gray-100);
+    }
+
+    .topbar {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 18px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--box-shadow);
+      z-index: 99;
+      border-bottom: 1px solid var(--gray-300);
+      position: relative;
+    }
+
+    .topbar h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      box-shadow: var(--box-shadow);
+    }
+
+    .logout-btn {
+      color: var(--gray-600);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+      font-weight: 500;
+      padding: 8px 15px;
+      border-radius: 8px;
+    }
+
+    .logout-btn:hover {
+      color: var(--danger);
+      background: var(--gray-200);
+    }
+
+    /* Mobile Hamburger Menu */
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--primary);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    .mobile-menu-toggle:hover {
+      background: var(--gray-200);
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 280px;
+      height: 100%;
+      background: rgba(15, 31, 61, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      transition: var(--transition);
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .mobile-menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 20px;
+    }
+
+    .mobile-menu-header h3 {
+      color: white;
+      font-size: 20px;
+    }
+
+    .mobile-menu-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .mobile-menu-items {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .mobile-menu-item {
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    .mobile-menu-item:hover, .mobile-menu-item.active {
+      background: var(--glass-bg);
+    }
+
+    .mobile-menu-item i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+
+    .mobile-menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .content-area {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+      background: var(--gray-100);
+    }
+
+    /* Card Styles */
+    .card {
+      background: white;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--box-shadow);
+      margin-bottom: 30px;
+      overflow: hidden;
+      transition: var(--transition);
+      border: 1px solid var(--gray-200);
+    }
+
+    .card:hover {
+      box-shadow: var(--box-shadow-lg);
+    }
+
+    .card-header {
+      padding: 20px 30px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+    }
+
+    .card-header h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body {
+      padding: 30px;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -12px;
+    }
+
+    .form-col {
+      flex: 1;
+      min-width: 250px;
+      padding: 0 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--border-radius);
+      font-family: "Inter", sans-serif;
+      font-size: 15px;
+      transition: var(--transition);
+      background: white;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.1);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border: none;
+      border-radius: var(--border-radius);
+      font-family: "Inter", sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--box-shadow);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      box-shadow: var(--box-shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success), #48bb78);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: linear-gradient(135deg, #48bb78, var(--success));
+      box-shadow: var(--box-shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--gray-300);
+      color: var(--gray-700);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--gray-100);
+      transform: translateY(-2px);
+    }
+
+    .btn-sm {
+      padding: 10px 18px;
+      font-size: 14px;
+    }
+
+    /* Stats Cards */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+      transition: var(--transition);
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--box-shadow-lg);
+      padding: 25px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: white;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--accent);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--box-shadow-xl);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-info h3 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .stat-info p {
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    /* Candidate Cards */
+    .candidates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 25px;
+    }
+
+    .candidate-card {
+      background: white;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+      transition: var(--transition);
+      border: 1px solid var(--gray-200);
+    }
+
+    .candidate-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--box-shadow-lg);
+    }
+
+    .candidate-header {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .candidate-photo {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--gray-200);
+    }
+
+    .candidate-info {
+      flex: 1;
+    }
+
+    .candidate-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .candidate-position {
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-bottom: 5px;
+    }
+
+    .candidate-party {
+      display: inline-block;
+      padding: 4px 10px;
+      background: var(--gray-100);
+      color: var(--gray-700);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .candidate-body {
+      padding: 20px;
+    }
+
+    .candidate-tagline {
+      font-style: italic;
+      color: var(--gray-600);
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .candidate-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .candidate-stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+
+    .candidate-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Enhanced Status Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-pending {
+      background-color: rgba(214, 158, 46, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(214, 158, 46, 0.3);
+    }
+
+    .status-approved {
+      background-color: rgba(56, 161, 105, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(56, 161, 105, 0.3);
+    }
+
+    .status-rejected {
+      background-color: rgba(229, 62, 62, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(229, 62, 62, 0.3);
+    }
+
+    .winner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: white;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: white;
+      border-radius: var(--border-radius-xl);
+      box-shadow: var(--box-shadow-xl);
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(20px);
+      transition: var(--transition);
+    }
+
+    .modal-overlay.active .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      padding: 25px 30px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--gray-500);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--danger);
+    }
+
+    .modal-body {
+      padding: 30px;
+    }
+
+    /* Voter Statistics Styles */
+    .voter-statistics {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+    }
+
+    .voter-statistics .card-header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .voter-statistics .card-header h3 {
+      color: white;
+    }
+
+    .voter-statistics .card-body {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+    }
+
+    .voter-stats-highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-bottom: 35px;
+    }
+
+    .voter-stat-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--border-radius-lg);
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--glass-border);
+      transition: transform 0.3s ease;
+    }
+
+    .voter-stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .voter-stat-number {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .voter-stat-label {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    .charts-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 30px;
+      margin-bottom: 35px;
+    }
+
+    .chart-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--border-radius-lg);
+      padding: 25px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--glass-border);
+    }
+
+    .chart-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+      color: white;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+
+    .voter-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 25px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+
+    .voter-data-table th, .voter-data-table td {
+      padding: 15px 20px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .voter-data-table th {
+      background: rgba(255, 255, 255, 0.2);
+      font-weight: 600;
+    }
+
+    .voter-data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .voter-data-table tr:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .voter-filters {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .voter-filter-select {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: var(--border-radius);
+      padding: 12px 18px;
+      color: white;
+      font-size: 15px;
+      min-width: 180px;
+    }
+
+    .voter-filter-select option {
+      background: var(--primary);
+    }
+
+    .voter-footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      opacity: 0.7;
+      text-align: center;
+      color: white;
+    }
+
+    /* Settings specific styles */
+    .settings-container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 30px;
+    }
+    
+    .settings-sidebar {
+      background: white;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+    }
+    
+    .settings-nav {
+      padding: 0;
+    }
+    
+    .settings-nav-item {
+      padding: 18px 25px;
+      border-bottom: 1px solid var(--gray-200);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .settings-nav-item:hover {
+      background-color: var(--gray-100);
+    }
+    
+    .settings-nav-item.active {
+      background-color: rgba(26, 54, 93, 0.1);
+      border-left: 4px solid var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    .settings-nav-item i {
+      width: 20px;
+      text-align: center;
+      font-size: 18px;
+    }
+    
+    .settings-content {
+      background: white;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+    }
+    
+    .settings-section {
+      display: none;
+      padding: 30px;
+    }
+    
+    .settings-section.active {
+      display: block;
+    }
+    
+    .settings-section h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: var(--primary);
+    }
+    
+    .settings-section h4 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 30px 0 20px 0;
+      color: var(--gray-700);
+    }
+    
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 55px;
+      height: 28px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--gray-300);
+      transition: var(--transition);
+      border-radius: 34px;
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: var(--transition);
+      border-radius: 50%;
+    }
+    
+    input:checked + .toggle-slider {
+      background-color: var(--primary);
+    }
+    
+    input:checked + .toggle-slider:before {
+      transform: translateX(27px);
+    }
+    
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 20px;
+      background-color: var(--gray-100);
+      border-radius: var(--border-radius);
+    }
+    
+    .toggle-text {
+      flex: 1;
+    }
+    
+    .toggle-text h5 {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    
+    .toggle-text p {
+      font-size: 14px;
+      color: var(--gray-600);
+    }
+    
+    .color-scheme-options {
+      display: flex;
+      gap: 20px;
+      margin-top: 15px;
+    }
+    
+    .color-option {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: var(--transition);
+      box-shadow: var(--box-shadow);
+    }
+    
+    .color-option.active {
+      border-color: var(--primary);
+      transform: scale(1.1);
+    }
+    
+    .color-option.primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    }
+    
+    .color-option.green {
+      background: linear-gradient(135deg, var(--success), #48bb78);
+    }
+    
+    .color-option.purple {
+      background: linear-gradient(135deg, #805ad5, #6b46c1);
+    }
+    
+    .color-option.orange {
+      background: linear-gradient(135deg, #ed8936, #dd6b20);
+    }
+    
+    .danger-zone {
+      border: 1px solid var(--danger);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      background-color: rgba(229, 62, 62, 0.05);
+    }
+    
+    .danger-zone h4 {
+      color: var(--danger);
+      margin-top: 0;
+    }
+    
+    .danger-zone p {
+      color: var(--gray-600);
+      margin-bottom: 20px;
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, var(--danger), #fc8181);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background: linear-gradient(135deg, #fc8181, var(--danger));
+      box-shadow: var(--box-shadow-lg);
+      transform: translateY(-2px);
+    }
+    
+    .backup-options {
+      display: flex;
+      gap: 20px;
+      margin-top: 25px;
+    }
+    
+    .password-strength {
+      height: 6px;
+      background-color: var(--gray-300);
+      border-radius: 5px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    
+    .password-strength-bar {
+      height: 100%;
+      width: 0%;
+      transition: var(--transition);
+    }
+    
+    .password-strength.weak .password-strength-bar {
+      background-color: var(--danger);
+      width: 33%;
+    }
+    
+    .password-strength.medium .password-strength-bar {
+      background-color: var(--warning);
+      width: 66%;
+    }
+    
+    .password-strength.strong .password-strength-bar {
+      background-color: var(--success);
+      width: 100%;
+    }
+
+    /* Dropdown Styles */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-toggle {
+      background: white;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--border-radius);
+      padding: 10px 15px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .dropdown-toggle:hover {
+      background-color: var(--gray-100);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1000;
+      display: none;
+      min-width: 180px;
+      padding: 10px 0;
+      margin: 5px 0 0;
+      background-color: white;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow-lg);
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      font-size: 14px;
+      color: var(--gray-700);
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .dropdown-item:hover {
+      background-color: var(--gray-100);
+    }
+
+    .dropdown-item.approve {
+      color: var(--success);
+    }
+
+    .dropdown-item.reject {
+      color: var(--danger);
+    }
+
+    .dropdown-item.pending {
+      color: var(--warning);
+    }
+
+    /* Toast Notification Styles */
+    .toast-container {
+      position: fixed;
+      top: 25px;
+      right: 25px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .toast {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow-lg);
+      color: white;
+      max-width: 380px;
+      animation: slideInRight 0.3s ease;
+    }
+
+    .toast.success {
+      background: linear-gradient(135deg, var(--success), #48bb78);
+    }
+
+    .toast.error {
+      background: linear-gradient(135deg, var(--danger), #fc8181);
+    }
+
+    .toast.warning {
+      background: linear-gradient(135deg, var(--warning), #ed8936);
+    }
+
+    .toast.info {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    }
+
+    .toast-icon {
+      font-size: 20px;
+    }
+
+    .toast-content {
+      flex: 1;
+    }
+
+    .toast-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .toast-message {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: var(--transition);
+    }
+
+    .toast-close:hover {
+      opacity: 1;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .sidebar {
+        width: 240px;
+      }
+      
+      .settings-container {
+        grid-template-columns: 240px 1fr;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .dashboard-container {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+      }
+      
+      .sidebar-menu {
+        display: flex;
+        overflow-x: auto;
+        padding: 15px 0;
+      }
+      
+      .menu-item {
+        white-space: nowrap;
+        border-left: none;
+        border-bottom: 4px solid transparent;
+        min-width: 160px;
+        justify-content: center;
+      }
+      
+      .menu-item.active {
+        border-left: none;
+        border-bottom-color: var(--accent);
+      }
+
+      .settings-container {
+        grid-template-columns: 1fr;
+      }
+
+      .charts-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .content-area {
+        padding: 20px;
+      }
+      
+      .form-col {
+        min-width: 100%;
+      }
+      
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+
+      .candidates-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .backup-options {
+        flex-direction: column;
+      }
+
+      .voter-filters {
+        flex-direction: column;
+      }
+      
+      .voter-filter-select {
+        width: 100%;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      /* Show mobile menu toggle on smaller screens */
+      .mobile-menu-toggle {
+        display: block;
+      }
+
+      /* Hide sidebar on mobile */
+      .sidebar {
+        display: none;
+      }
+    }
+
+    .flash-new {
+      animation: flashHighlight 2s ease;
+    }
+
+    @keyframes flashHighlight {
+      0%   { background-color: rgba(56, 161, 105, 0.2); }
+      50%  { background-color: rgba(214, 158, 46, 0.2); }
+      100% { background-color: transparent; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <i class="fas fa-vote-yea"></i>
+        <h1>Voting System</h1>
+      </div>
+      <div class="sidebar-menu">
+        <div class="menu-item active" data-section="dashboard">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </div>
+        <div class="menu-item" data-section="voter-statistics">
+          <i class="fas fa-chart-line"></i>
+          <span>Voter Statistics</span>
+        </div>
+        <div class="menu-item" data-section="add-candidate">
+          <i class="fas fa-user-plus"></i>
+          <span>Add Candidate</span>
+        </div>
+        <div class="menu-item" data-section="candidates">
+          <i class="fas fa-users"></i>
+          <span>Candidates</span>
+        </div>
+        <div class="menu-item" data-section="results">
+          <i class="fas fa-chart-bar"></i>
+          <span>Results</span>
+        </div>
+        <div class="menu-item" data-section="settings">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="topbar">
+        <h2>Admin Dashboard</h2>
+        <div class="user-info">
+          <div class="user-avatar">AD</div>
+          <a href="../logout.html" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+          <!-- Mobile Hamburger Menu Toggle -->
+          <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Overlay -->
+      <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+      <!-- Mobile Menu -->
+      <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+          <h3>Menu</h3>
+          <button class="mobile-menu-close" id="mobileMenuClose">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="mobile-menu-items">
+          <a href="#" class="mobile-menu-item active" data-section="dashboard">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+          <a href="#" class="mobile-menu-item" data-section="voter-statistics">
+            <i class="fas fa-chart-line"></i>
+            <span>Voter Statistics</span>
+          </a>
+          <a href="#" class="mobile-menu-item" data-section="add-candidate">
+            <i class="fas fa-user-plus"></i>
+            <span>Add Candidate</span>
+          </a>
+          <a href="#" class="mobile-menu-item" data-section="candidates">
+            <i class="fas fa-users"></i>
+            <span>Candidates</span>
+          </a>
+          <a href="#" class="mobile-menu-item" data-section="results">
+            <i class="fas fa-chart-bar"></i>
+            <span>Results</span>
+          </a>
+          <a href="#" class="mobile-menu-item" data-section="settings">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="content-area">
+        <!-- Dashboard Stats -->
+        <div class="stats-container" id="statsContainer">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalCandidates">0</h3>
+              <p>Total Candidates</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-vote-yea"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalVotes">0</h3>
+              <p>Total Votes</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-hourglass-half"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="pendingCandidates">0</h3>
+              <p>Pending Candidates</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="activeElections">0</h3>
+              <p>Active Elections</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Voter Statistics Section -->
+        <div class="card voter-statistics" id="voter-statistics-section" style="display: none;">
+          <div class="card-header">
+            <h3><i class="fas fa-chart-bar"></i> Voter Statistics Dashboard</h3>
+          </div>
+          <div class="card-body">
+            <div class="user-info" style="background: rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 15px; display: inline-block; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+              Welcome, <strong id="adminName">Admin User</strong> | Last updated: <strong id="lastUpdated">Today, 10:30 AM</strong>
+            </div>
+
+            <div class="voter-filters">
+              <select class="voter-filter-select" id="regionFilter">
+                <option value="">All Regions</option>
+                <option value="north">North Region</option>
+                <option value="south">South Region</option>
+                <option value="east">East Region</option>
+                <option value="west">West Region</option>
+              </select>
+              
+              <select class="voter-filter-select" id="timeFilter">
+                <option value="all">All Time</option>
+                <option value="week">Past Week</option>
+                <option value="month">Past Month</option>
+                <option value="year">Past Year</option>
+              </select>
+              
+              <select class="voter-filter-select" id="electionFilter">
+                <option value="">All Elections</option>
+                <option value="presidential">Presidential</option>
+                <option value="senate">Senate</option>
+                <option value="local">Local</option>
+              </select>
+            </div>
+
+            <div class="voter-stats-highlights">
+              <div class="voter-stat-card">
+                <div class="voter-stat-number" id="totalVoters">0</div>
+                <div class="voter-stat-label">Total Voters</div>
+              </div>
+              <div class="voter-stat-card">
+                <div class="voter-stat-number" id="votesCast">0</div>
+                <div class="voter-stat-label">Votes Cast</div>
+              </div>
+              <div class="voter-stat-card">
+                <div class="voter-stat-number" id="turnoutRate">0%</div>
+                <div class="voter-stat-label">Voter Turnout</div>
+              </div>
+              <div class="voter-stat-card">
+                <div class="voter-stat-number" id="pendingVerification">0</div>
+                <div class="voter-stat-label">Pending Verification</div>
+              </div>
+            </div>
+
+            <div class="charts-container">
+              <div class="chart-card">
+                <h3 class="chart-title">Voter Turnout by Age Group</h3>
+                <div class="chart-container">
+                  <canvas id="ageChart"></canvas>
+                </div>
+              </div>
+              
+              <div class="chart-card">
+                <h3 class="chart-title">Voting Method Distribution</h3>
+                <div class="chart-container">
+                  <canvas id="methodChart"></canvas>
+                </div>
+              </div>
+              
+              <div class="chart-card">
+                <h3 class="chart-title">Voter Registration Timeline</h3>
+                <div class="chart-container">
+                  <canvas id="timelineChart"></canvas>
+                </div>
+              </div>
+              
+              <div class="chart-card">
+                <h3 class="chart-title">Regional Voter Distribution</h3>
+                <div class="chart-container">
+                  <canvas id="regionChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <h3 style="margin: 30px 0 15px; color: white;">Detailed Voter Statistics</h3>
+            <table class="voter-data-table">
+              <thead>
+                <tr>
+                  <th>Region</th>
+                  <th>Registered Voters</th>
+                  <th>Votes Cast</th>
+                  <th>Turnout Rate</th>
+                  <th>Male</th>
+                  <th>Female</th>
+                </tr>
+              </thead>
+              <tbody id="statsTableBody">
+                <!-- Data will be populated dynamically -->
+              </tbody>
+            </table>
+
+            <div class="voter-footer">
+              <p>Voting System Dashboard &copy; 2023 | Data updates automatically every 15 minutes</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Candidate Section -->
+        <div class="card" id="add-candidate-section" style="display: none;">
+          <div class="card-header">
+            <h3>Add New Candidate</h3>
+          </div>
+          <div class="card-body">
+            <form id="candidateForm" enctype="multipart/form-data">
+              <div class="form-row">
+                <div class="form-col">
+                  <label for="full_name">Full Name</label>
+                  <input type="text" id="full_name" name="full_name" required>
+                </div>
+                <div class="form-col">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" required>
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-col">
+                  <label for="phone">Phone</label>
+                  <input type="text" id="phone" name="phone">
+                </div>
+                <div class="form-col">
+                  <label for="student_id">Student ID</label>
+                  <input type="text" id="student_id" name="student_id">
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-col">
+                  <label for="positionSelect">Position</label>
+                  <select id="positionSelect" name="position_id" required></select>
+                </div>
+                <div class="form-col">
+                  <label for="electionSelect">Election</label>
+                  <select id="electionSelect" name="election_id" required></select>
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-col">
+                  <label for="party">Party</label>
+                  <input type="text" id="party" name="party" required>
+                </div>
+                <div class="form-col">
+                  <label for="tagline">Tagline</label>
+                  <input type="text" id="tagline" name="tagline" required>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio" name="bio" rows="3" required></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="platform_points">Platform Points</label>
+                <textarea id="platform_points" name="platform_points" rows="3" required></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="photo">Photo</label>
+                <input type="file" id="photo" name="photo" accept="image/*">
+              </div>
+              
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i>
+                Add Candidate
+              </button>
+            </form>
+            <p id="candidateMessage" style="margin-top: 15px;"></p>
+          </div>
+        </div>
+
+        <!-- Candidate List -->
+        <div class="card" id="candidates-section" style="display: none;">
+          <div class="card-header">
+            <h3>All Candidates</h3>
+            <button class="btn btn-outline btn-sm">
+              <i class="fas fa-download"></i>
+              Export
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="candidates-grid" id="candidatesGrid">
+              <!-- Candidate cards will be populated here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="card" id="results-section" style="display: none;">
+          <div class="card-header">
+            <h3>Election Results</h3>
+            <button class="btn btn-outline btn-sm">
+              <i class="fas fa-print"></i>
+              Print
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="candidates-grid" id="resultsGrid">
+              <!-- Results cards will be populated here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div class="card" id="settings-section" style="display: none;">
+          <div class="card-header">
+            <h3>System Settings</h3>
+          </div>
+          <div class="card-body">
+            <div class="settings-container">
+              <div class="settings-sidebar">
+                <div class="settings-nav">
+                  <div class="settings-nav-item active" data-tab="general">
+                    <i class="fas fa-cog"></i>
+                    <span>General</span>
+                  </div>
+                  <div class="settings-nav-item" data-tab="appearance">
+                    <i class="fas fa-palette"></i>
+                    <span>Appearance</span>
+                  </div>
+                  <div class="settings-nav-item" data-tab="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                  </div>
+                  <div class="settings-nav-item" data-tab="security">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Security</span>
+                  </div>
+                  <div class="settings-nav-item" data-tab="backup">
+                    <i class="fas fa-database"></i>
+                    <span>Backup & Restore</span>
+                  </div>
+                  <div class="settings-nav-item" data-tab="danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Danger Zone</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="settings-content">
+                <!-- General Settings -->
+                <div class="settings-section active" id="general-tab">
+                  <h3>General Settings</h3>
+                  
+                  <div class="form-group">
+                    <label for="systemName">System Name</label>
+                    <input type="text" id="systemName" value="Voting System" placeholder="Enter system name">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="adminEmail">Admin Email</label>
+                    <input type="email" id="adminEmail" value="admin@votingsystem.com" placeholder="Enter admin email">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="timezone">Timezone</label>
+                    <select id="timezone">
+                      <option value="UTC-5">Eastern Time (UTC-5)</option>
+                      <option value="UTC-6" selected>Central Time (UTC-6)</option>
+                      <option value="UTC-7">Mountain Time (UTC-7)</option>
+                      <option value="UTC-8">Pacific Time (UTC-8)</option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="dateFormat">Date Format</label>
+                    <select id="dateFormat">
+                      <option value="MM/DD/YYYY" selected>MM/DD/YYYY</option>
+                      <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                      <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                    </select>
+                  </div>
+                  
+                  <button class="btn btn-primary" onclick="saveGeneralSettings()">
+                    <i class="fas fa-save"></i>
+                    Save General Settings
+                  </button>
+                </div>
+                
+                <!-- Appearance Settings -->
+                <div class="settings-section" id="appearance-tab">
+                  <h3>Appearance Settings</h3>
+                  
+                  <div class="form-group">
+                    <label>Theme</label>
+                    <div class="color-scheme-options">
+                      <div class="color-option primary active" data-theme="primary"></div>
+                      <div class="color-option green" data-theme="green"></div>
+                      <div class="color-option purple" data-theme="purple"></div>
+                      <div class="color-option orange" data-theme="orange"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="toggle-label">
+                    <div class="toggle-text">
+                      <h5>Dark Mode</h5>
+                      <p>Enable dark mode for the dashboard</p>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="darkMode">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  
+                  <div class="toggle-label">
+                    <div class="toggle-text">
+                      <h5>Compact Layout</h5>
+                      <p>Use compact spacing for dashboard elements</p>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="compactLayout" checked>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  
+                  <div class="toggle-label">
+                    <div class="toggle-text">
+                      <h5>Show Avatars</h5>
+                      <p>Display user avatars throughout the system</p>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="showAvatars" checked>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  
+                  <button class="btn btn-primary" onclick="saveAppearanceSettings()">
+                    <i class="fas fa-save"></i>
+                    Save Appearance Settings
+                  </button>
+                </div>
+                
+                <!-- Notification Settings -->
+                <div class="settings-section" id="notifications-tab">
+                  <h3>Notification Settings</h3>
+                  
+                  <div class="toggle-label">
+                    <div class="toggle-text">
+                      <h5>Email Notifications</h5>
+                      <p>Receive email alerts for important events</p>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="emailNotifications" checked>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  
+                  <div class="toggle-label">
+                    <div class="toggle-text">
+                      <h5>New Candidate Alerts</h5>
+                      <p>Get notified when new candidates register</p>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="candidateAlerts" checked>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  
+                  <div class="toggle-label">
+                    <div class="toggle-text">
+                      <h5>Voting Results</h5>
+                      <p>Receive notifications when voting results are available</p>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="resultsAlerts" checked>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  
+                  <div class="toggle-label">
+                    <div class="toggle-text">
+                      <h5>System Updates</h5>
+                      <p>Get notified about system maintenance and updates</p>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="systemUpdates" checked>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  
+                  <button class="btn btn-primary" onclick="saveNotificationSettings()">
+                    <i class="fas fa-save"></i>
+                    Save Notification Settings
+                  </button>
+                </div>
+                
+                <!-- Security Settings -->
+                <div class="settings-section" id="security-tab">
+                  <h3>Security Settings</h3>
+                  
+                  <h4>Change Password</h4>
+                  <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" placeholder="Enter current password">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" placeholder="Enter new password" onkeyup="checkPasswordStrength()">
+                    <div class="password-strength" id="passwordStrength">
+                      <div class="password-strength-bar"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                  </div>
+                  
+                  <h4>Security Options</h4>
+                  <div class="toggle-label">
+                    <div class="toggle-text">
+                      <h5>Two-Factor Authentication</h5>
+                      <p>Add an extra layer of security to your account</p>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="twoFactorAuth">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  
+                  <div class="toggle-label">
+                    <div class="toggle-text">
+                      <h5>Session Timeout</h5>
+                      <p>Automatically log out after 30 minutes of inactivity</p>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="sessionTimeout" checked>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  
+                  <button class="btn btn-primary" onclick="saveSecuritySettings()">
+                    <i class="fas fa-save"></i>
+                    Save Security Settings
+                  </button>
+                </div>
+                
+                <!-- Backup & Restore -->
+                <div class="settings-section" id="backup-tab">
+                  <h3>Backup & Restore</h3>
+                  
+                  <div class="form-group">
+                    <label>Automatic Backups</label>
+                    <select id="backupFrequency">
+                      <option value="daily">Daily</option>
+                      <option value="weekly" selected>Weekly</option>
+                      <option value="monthly">Monthly</option>
+                      <option value="never">Never</option>
+                    </select>
+                  </div>
+                  
+                  <div class="backup-options">
+                    <button class="btn btn-primary" onclick="createBackup()">
+                      <i class="fas fa-download"></i>
+                      Create Backup Now
+                    </button>
+                    
+                    <button class="btn btn-outline" onclick="document.getElementById('restoreFile').click()">
+                      <i class="fas fa-upload"></i>
+                      Restore from Backup
+                    </button>
+                    <input type="file" id="restoreFile" style="display: none;" accept=".json,.sql,.backup">
+                  </div>
+                  
+                  <h4>Recent Backups</h4>
+                  <div class="table-container">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Size</th>
+                          <th>Type</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>2023-11-15 14:30</td>
+                          <td>2.4 MB</td>
+                          <td>Full System</td>
+                          <td>
+                            <button class="btn btn-success btn-sm">
+                              <i class="fas fa-download"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm">
+                              <i class="fas fa-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>2023-11-08 14:30</td>
+                          <td>2.3 MB</td>
+                          <td>Full System</td>
+                          <td>
+                            <button class="btn btn-success btn-sm">
+                              <i class="fas fa-download"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm">
+                              <i class="fas fa-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <!-- Danger Zone -->
+                <div class="settings-section" id="danger-tab">
+                  <h3>Danger Zone</h3>
+                  
+                  <div class="danger-zone">
+                    <h4>Reset All Data</h4>
+                    <p>This will permanently delete all candidates, votes, and election data. This action cannot be undone.</p>
+                    <button class="btn btn-danger" onclick="confirmReset()">
+                      <i class="fas fa-trash"></i>
+                      Reset All Data
+                    </button>
+                  </div>
+                  
+                  <div class="danger-zone" style="margin-top: 20px;">
+                    <h4>Delete Account</h4>
+                    <p>Permanently delete your admin account and all associated data.</p>
+                    <button class="btn btn-danger" onclick="confirmAccountDeletion()">
+                      <i class="fas fa-user-slash"></i>
+                      Delete Account
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Candidate Detail Modal -->
+  <div class="modal-overlay" id="candidateModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Candidate Details</h3>
+        <button class="modal-close" id="closeModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="candidateModalBody">
+        <!-- Candidate details will be populated here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // ==============================
+    // Mobile Menu Functionality
+    // ==============================
+    function setupMobileMenu() {
+      const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileMenuClose = document.getElementById('mobileMenuClose');
+      const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+      const mobileMenuItems = document.querySelectorAll('.mobile-menu-item');
+
+      // Toggle mobile menu
+      mobileMenuToggle.addEventListener('click', () => {
+        mobileMenu.classList.add('active');
+        mobileMenuOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+
+      // Close mobile menu
+      function closeMobileMenu() {
+        mobileMenu.classList.remove('active');
+        mobileMenuOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      mobileMenuClose.addEventListener('click', closeMobileMenu);
+      mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+
+      // Handle mobile menu item clicks
+      mobileMenuItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          const sectionId = item.getAttribute('data-section');
+          
+          // Update active state
+          mobileMenuItems.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          
+          // Navigate to section
+          navigateToSection(sectionId);
+          
+          // Close mobile menu
+          closeMobileMenu();
+        });
+      });
+    }
+
+    // ==============================
+    // API Configuration
+    // ==============================
+    const API_BASE_URL = 'http://localhost:3000';
+    const API_ENDPOINTS = {
+      stats: '/api/stats',
+      positions: '/api/positions',
+      elections: '/api/elections',
+      candidates: '/api/candidates',
+      results: '/api/results',
+      voterStats: '/api/voter-stats',
+      addCandidate: '/admin/candidates',
+      confirmWinner: '/admin/confirm-winner',
+      updateCandidateStatus: '/admin/candidate-status'
+    };
+
+    // ==============================
+    // Toast Notification System
+    // ==============================
+    function showToast(type, title, message, duration = 5000) {
+      const toastContainer = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      
+      let icon = 'fa-info-circle';
+      if (type === 'success') icon = 'fa-check-circle';
+      if (type === 'error') icon = 'fa-exclamation-circle';
+      if (type === 'warning') icon = 'fa-exclamation-triangle';
+      
+      toast.innerHTML = `
+        <div class="toast-icon">
+          <i class="fas ${icon}"></i>
+        </div>
+        <div class="toast-content">
+          <div class="toast-title">${title}</div>
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      // Auto remove after duration
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.style.animation = 'slideOutRight 0.3s ease';
+          setTimeout(() => {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+          }, 300);
+        }
+      }, duration);
+      
+      // Close button functionality
+      const closeBtn = toast.querySelector('.toast-close');
+      closeBtn.addEventListener('click', () => {
+        toast.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 300);
+      });
+    }
+
+    // ==============================
+    // Dropdown Functionality
+    // ==============================
+    function setupDropdowns() {
+      const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+      
+      dropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const dropdownMenu = this.nextElementSibling;
+          const isOpen = dropdownMenu.classList.contains('show');
+          
+          // Close all dropdowns
+          document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            menu.classList.remove('show');
+          });
+          
+          // Toggle current dropdown
+          if (!isOpen) {
+            dropdownMenu.classList.add('show');
+          }
+        });
+      });
+      
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', function() {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          menu.classList.remove('show');
+        });
+      });
+    }
+
+    // ==============================
+    // Unified API Call (JSON or FormData)
+    // ==============================
+    async function apiCall(endpoint, method = 'GET', data = null, isFormData = false) {
+      const options = { method };
+      if (data) {
+        if (isFormData) options.body = data;
+        else {
+          options.headers = { 'Content-Type': 'application/json' };
+          options.body = JSON.stringify(data);
+        }
+      }
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+      if (!response.ok) throw new Error(`API Error: ${response.status}`);
+      return await response.json();
+    }
+
+    // ==============================
+    // Navigation
+    // ==============================
+    function setupNavigation() {
+      const menuItems = document.querySelectorAll('.menu-item');
+      const sections = document.querySelectorAll('.card');
+
+      menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const sectionId = item.getAttribute('data-section');
+          menuItems.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+
+          navigateToSection(sectionId);
+        });
+      });
+
+      // Initialize with dashboard active
+      navigateToSection('dashboard');
+    }
+
+    function navigateToSection(sectionId) {
+      const sections = document.querySelectorAll('.card');
+      const statsContainer = document.getElementById('statsContainer');
+      
+      // Show/hide stats based on active section
+      if (sectionId === 'dashboard') {
+        statsContainer.style.display = 'grid';
+      } else {
+        statsContainer.style.display = 'none';
+      }
+      
+      sections.forEach(section => {
+        section.style.display = section.id === `${sectionId}-section` ? 'block' : 'none';
+        if (sectionId === 'voter-statistics') updateVoterDashboard();
+        if (sectionId === 'candidates') loadCandidates(); // refresh tab when opened
+      });
+    }
+
+    function setupSettingsNavigation() {
+      const navItems = document.querySelectorAll('.settings-nav-item');
+      const sections = document.querySelectorAll('.settings-section');
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const tabId = item.getAttribute('data-tab');
+          navItems.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          sections.forEach(section => section.classList.toggle('active', section.id === `${tabId}-tab`));
+        });
+      });
+    }
+
+    function setupThemeSelection() {
+      const colorOptions = document.querySelectorAll('.color-option');
+      colorOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          colorOptions.forEach(o => o.classList.remove('active'));
+          option.classList.add('active');
+          const theme = option.getAttribute('data-theme');
+          console.log('Theme changed to:', theme);
+        });
+      });
+    }
+
+    // ==============================
+    // Stats
+    // ==============================
+    async function updateStats() {
+      try {
+        const data = await apiCall(API_ENDPOINTS.stats);
+        document.getElementById('totalCandidates').textContent = data.totalCandidates;
+        document.getElementById('totalVotes').textContent = data.totalVotes;
+        document.getElementById('pendingCandidates').textContent = data.pendingCandidates;
+        document.getElementById('activeElections').textContent = data.activeElections;
+      } catch (err) {
+        console.error('Failed to fetch stats:', err);
+        showToast('error', 'Error', 'Failed to load dashboard statistics');
+      }
+    }
+
+    // ==============================
+    // Positions & Elections
+    // ==============================
+    async function fetchPositions() {
+      const select = document.getElementById('positionSelect');
+      try {
+        const data = await apiCall(API_ENDPOINTS.positions);
+        select.innerHTML = data.positions.map(p => `<option value="${p.position_id}">${p.position_key}</option>`).join('');
+      } catch (err) {
+        console.error('Failed to fetch positions:', err);
+        showToast('error', 'Error', 'Failed to load positions');
+      }
+    }
+
+    async function fetchElections() {
+      const select = document.getElementById('electionSelect');
+      try {
+        const data = await apiCall(API_ENDPOINTS.elections);
+        select.innerHTML = data.elections.map(e => `<option value="${e.election_id}">${e.election_name}</option>`).join('');
+      } catch (err) {
+        console.error('Failed to fetch elections:', err);
+        showToast('error', 'Error', 'Failed to load elections');
+      }
+    }
+
+    // ==============================
+    // Candidates & Results
+    // ==============================
+    function getStatusBadge(status) {
+      if (status === 'approved') {
+        return '<span class="status-badge status-approved"><i class="fas fa-check-circle"></i> Approved</span>';
+      } else if (status === 'rejected') {
+        return '<span class="status-badge status-rejected"><i class="fas fa-times-circle"></i> Rejected</span>';
+      } else {
+        return '<span class="status-badge status-pending"><i class="fas fa-clock"></i> Pending</span>';
+      }
+    }
+
+    function candidateCardHTML(c, highlight = false) {
+      return `
+        <div class="candidate-card ${highlight ? 'flash-new' : ''}" data-id="${c.candidate_id}">
+          <div class="candidate-header">
+            <img src="${c.photo || 'https://via.placeholder.com/70'}" alt="Photo" class="candidate-photo">
+            <div class="candidate-info">
+              <div class="candidate-name">${c.full_name}</div>
+              <div class="candidate-position">${c.position_name || c.position_key}</div>
+              <div class="candidate-party">${c.party}</div>
+            </div>
+          </div>
+          <div class="candidate-body">
+            <div class="candidate-tagline">"${c.tagline}"</div>
+            <div class="candidate-stats">
+              <div class="candidate-stat">
+                <div class="stat-value">${c.total_votes || 0}</div>
+                <div class="stat-label">Votes</div>
+              </div>
+              <div class="candidate-stat">
+                <div class="stat-value">${c.election_name || ''}</div>
+                <div class="stat-label">Election</div>
+              </div>
+            </div>
+            <div class="candidate-footer">
+              <div>
+                ${getStatusBadge(c.status)}
+                ${c.is_winner ? '<span class="winner-badge" style="margin-left: 8px;"><i class="fas fa-trophy"></i> Winner</span>' : ''}
+              </div>
+              <div class="action-buttons">
+                <button class="btn btn-outline btn-sm" onclick="viewCandidateDetails(${c.candidate_id})">
+                  <i class="fas fa-eye"></i> Details
+                </button>
+                <div class="dropdown">
+                  <button class="dropdown-toggle btn-sm">
+                    Actions <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="dropdown-menu">
+                    <div class="dropdown-item approve" onclick="updateCandidateStatus(${c.candidate_id}, 'approved')">
+                      <i class="fas fa-check"></i> Approve
+                    </div>
+                    <div class="dropdown-item reject" onclick="updateCandidateStatus(${c.candidate_id}, 'rejected')">
+                      <i class="fas fa-times"></i> Reject
+                    </div>
+                    <div class="dropdown-item pending" onclick="updateCandidateStatus(${c.candidate_id}, 'pending')">
+                      <i class="fas fa-clock"></i> Mark Pending
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function resultsCardHTML(r) {
+      return `
+        <div class="candidate-card">
+          <div class="candidate-header">
+            <img src="${r.photo || 'https://via.placeholder.com/70'}" alt="Photo" class="candidate-photo">
+            <div class="candidate-info">
+              <div class="candidate-name">${r.full_name}</div>
+              <div class="candidate-position">${r.position}</div>
+              <div class="candidate-party">${r.party || "—"}</div>
+            </div>
+          </div>
+          <div class="candidate-body">
+            <div class="candidate-stats">
+              <div class="candidate-stat">
+                <div class="stat-value">${r.votes}</div>
+                <div class="stat-label">Votes</div>
+              </div>
+              <div class="candidate-stat">
+                <div class="stat-value">${r.winner}</div>
+                <div class="stat-label">Status</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadCandidates(highlightId = null) {
+      try {
+        const data = await apiCall(API_ENDPOINTS.candidates);
+        const grid = document.getElementById('candidatesGrid');
+        grid.innerHTML = data.candidates.map(c => candidateCardHTML(c, highlightId === c.candidate_id)).join('');
+        
+        // Update stats
+        const pendingCount = data.candidates.filter(c => c.status === 'pending').length;
+        document.getElementById('pendingCandidates').textContent = pendingCount;
+        
+        // Setup dropdowns after loading
+        setupDropdowns();
+      } catch (err) {
+        console.error('Failed to fetch candidates:', err);
+        showToast('error', 'Error', 'Failed to load candidates');
+      }
+    }
+
+    async function loadResults() {
+      const grid = document.getElementById('resultsGrid');
+      grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 20px;">Loading...</div>`;
+
+      try {
+        const res = await fetch("/admin/results");
+        const data = await res.json();
+
+        if (!data.success) {
+          grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 20px;">Error loading results</div>`;
+          return;
+        }
+
+        grid.innerHTML = "";
+        data.results.forEach((r, i) => {
+          grid.innerHTML += resultsCardHTML(r);
+        });
+
+      } catch (err) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 20px;">Network error</div>`;
+      }
+    }
+
+    async function confirmWinner(candidate_id, position_id) {
+      try {
+        const result = await Swal.fire({
+          title: 'Confirm Winner',
+          text: 'Are you sure you want to confirm this candidate as the winner?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, confirm!',
+          cancelButtonText: 'Cancel'
+        });
+        
+        if (result.isConfirmed) {
+          const data = await apiCall(API_ENDPOINTS.confirmWinner, 'POST', { candidate_id, position_id });
+          showToast('success', 'Winner Confirmed', data.message || 'Candidate has been confirmed as winner!');
+          loadResults();
+          loadCandidates();
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('error', 'Error', 'Failed to confirm winner.');
+      }
+    }
+
+    // ==============================
+    // Candidate Details Modal
+    // ==============================
+    function viewCandidateDetails(candidate_id) {
+      // In a real implementation, this would fetch candidate details from the API
+      // For now, we'll show a placeholder modal
+      const modal = document.getElementById('candidateModal');
+      const modalBody = document.getElementById('candidateModalBody');
+      
+      modalBody.innerHTML = `
+        <div style="display: flex; gap: 20px; margin-bottom: 25px;">
+          <img src="https://via.placeholder.com/120" alt="Candidate Photo" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;">
+          <div>
+            <h4 style="font-size: 22px; margin-bottom: 8px; color: var(--primary);">Candidate Name</h4>
+            <p style="color: var(--gray-600); margin-bottom: 5px;">Position: President</p>
+            <p style="color: var(--gray-600); margin-bottom: 5px;">Party: Democratic Party</p>
+            <p style="color: var(--gray-600); margin-bottom: 5px;">Election: Student Council 2023</p>
+            <div style="margin-top: 10px;">${getStatusBadge('approved')}</div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Bio</label>
+          <p style="padding: 12px; background: var(--gray-100); border-radius: 8px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+        
+        <div class="form-group">
+          <label>Platform Points</label>
+          <p style="padding: 12px; background: var(--gray-100); border-radius: 8px;">
+            1. Improve campus facilities<br>
+            2. Increase student engagement<br>
+            3. Enhance academic resources
+          </p>
+        </div>
+        
+        <div class="form-group">
+          <label>Contact Information</label>
+          <p style="padding: 12px; background: var(--gray-100); border-radius: 8px;">
+            Email: candidate@example.com<br>
+            Phone: (123) 456-7890<br>
+            Student ID: S123456
+          </p>
+        </div>
+        
+        <div style="display: flex; gap: 15px; margin-top: 25px;">
+          <button class="btn btn-primary" onclick="updateCandidateStatus(${candidate_id}, 'approved')">
+            <i class="fas fa-check"></i> Approve Candidate
+          </button>
+          <button class="btn btn-danger" onclick="updateCandidateStatus(${candidate_id}, 'rejected')">
+            <i class="fas fa-times"></i> Reject Candidate
+          </button>
+        </div>
+      `;
+      
+      modal.classList.add('active');
+    }
+
+    // Close modal functionality
+    document.getElementById('closeModal').addEventListener('click', function() {
+      document.getElementById('candidateModal').classList.remove('active');
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('candidateModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('active');
+      }
+    });
+
+    // ==============================
+    // Change Candidate Status (Enhanced with Toast)
+    // ==============================
+    async function updateCandidateStatus(candidate_id, status) {
+      try {
+        const data = await apiCall(API_ENDPOINTS.updateCandidateStatus, 'PATCH', { candidate_id, status });
+        
+        // Show toast notification
+        let message = '';
+        let type = 'success';
+        
+        if (status === 'approved') {
+          message = `Candidate #${candidate_id} has been approved`;
+        } else if (status === 'rejected') {
+          message = `Candidate #${candidate_id} has been rejected`;
+        } else {
+          message = `Candidate #${candidate_id} marked as pending`;
+          type = 'warning';
+        }
+        
+        showToast(type, 'Status Updated', message);
+        
+        // Update the UI
+        loadCandidates(candidate_id); // highlight updated row
+        
+        // Update stats
+        updateStats();
+        
+        // Close modal if open
+        document.getElementById('candidateModal').classList.remove('active');
+        
+      } catch (err) {
+        console.error(err);
+        showToast('error', 'Error', 'Failed to update candidate status.');
+      }
+    }
+
+    // ==============================
+    // Candidate Form Submission (File Upload)
+    // ==============================
+    const candidateForm = document.getElementById('candidateForm');
+    if (candidateForm) {
+      candidateForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(candidateForm);
+        try {
+          const data = await apiCall(API_ENDPOINTS.addCandidate, 'POST', formData, true);
+          if (data.success) {
+            showToast('success', 'Candidate Added', 'Candidate has been added successfully!');
+            candidateForm.reset();
+            loadCandidates(data.candidate_id); // highlight new candidate
+            document.querySelector('.menu-item[data-section="candidates"]').click();
+          } else {
+            showToast('error', 'Error', data.message || 'Failed to add candidate');
+          }
+        } catch (err) {
+          console.error('Candidate submission error:', err);
+          showToast('error', 'Error', 'An error occurred while submitting the candidate.');
+        }
+      });
+    }
+
+    // ==============================
+    // Voter Dashboard
+    // ==============================
+    async function updateVoterDashboard() {
+      try {
+        const data = await apiCall(API_ENDPOINTS.voterStats);
+        
+        // Update main stats
+        document.getElementById('totalVoters').textContent = data.totalVoters;
+        document.getElementById('votesCast').textContent = data.votesCast;
+        document.getElementById('turnoutRate').textContent = data.turnoutRate;
+        document.getElementById('pendingVerification').textContent = data.pendingVerification;
+        
+        // Update admin info
+        document.getElementById('adminName').textContent = data.adminName || 'Admin User';
+        document.getElementById('lastUpdated').textContent = data.lastUpdated || new Date().toLocaleString();
+        
+        // Update detailed table
+        const statsTableBody = document.getElementById('statsTableBody');
+        if (statsTableBody && data.regionalStats) {
+          statsTableBody.innerHTML = data.regionalStats.map(region => `
+            <tr>
+              <td>${region.name}</td>
+              <td>${region.registeredVoters}</td>
+              <td>${region.votesCast}</td>
+              <td>${region.turnoutRate}</td>
+              <td>${region.male}</td>
+              <td>${region.female}</td>
+            </tr>
+          `).join('');
+        }
+        
+        // Update charts if data is available
+        if (data.charts) {
+          updateCharts(data.charts);
+        }
+        
+      } catch (err) {
+        console.error('Failed to fetch voter stats:', err);
+        showToast('error', 'Error', 'Failed to load voter statistics');
+      }
+    }
+
+    function updateCharts(chartData) {
+      // Update Age Chart
+      if (chartData.ageChart && window.ageChart) {
+        window.ageChart.data.labels = chartData.ageChart.labels;
+        window.ageChart.data.datasets[0].data = chartData.ageChart.data;
+        window.ageChart.update();
+      }
+      
+      // Update Method Chart
+      if (chartData.methodChart && window.methodChart) {
+        window.methodChart.data.labels = chartData.methodChart.labels;
+        window.methodChart.data.datasets[0].data = chartData.methodChart.data;
+        window.methodChart.update();
+      }
+      
+      // Update Timeline Chart
+      if (chartData.timelineChart && window.timelineChart) {
+        window.timelineChart.data.labels = chartData.timelineChart.labels;
+        window.timelineChart.data.datasets[0].data = chartData.timelineChart.data;
+        window.timelineChart.update();
+      }
+      
+      // Update Region Chart
+      if (chartData.regionChart && window.regionChart) {
+        window.regionChart.data.labels = chartData.regionChart.labels;
+        window.regionChart.data.datasets[0].data = chartData.regionChart.data;
+        window.regionChart.update();
+      }
+    }
+
+    function initializeVoterCharts() {
+      // Age Chart
+      const ageCtx = document.getElementById('ageChart')?.getContext('2d');
+      if (ageCtx) {
+        window.ageChart = new Chart(ageCtx, {
+          type: 'bar',
+          data: {
+            labels: [],
+            datasets: [{
+              label: 'Voter Turnout',
+              data: [],
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              borderColor: 'rgba(255, 255, 255, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  color: 'white'
+                },
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                }
+              },
+              x: {
+                ticks: {
+                  color: 'white'
+                },
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                labels: {
+                  color: 'white'
+                }
+              }
+            }
+          }
+        });
+      }
+      
+      // Method Chart
+      const methodCtx = document.getElementById('methodChart')?.getContext('2d');
+      if (methodCtx) {
+        window.methodChart = new Chart(methodCtx, {
+          type: 'doughnut',
+          data: {
+            labels: [],
+            datasets: [{
+              data: [],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)'
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                labels: {
+                  color: 'white'
+                }
+              }
+            }
+          }
+        });
+      }
+      
+      // Timeline Chart
+      const timelineCtx = document.getElementById('timelineChart')?.getContext('2d');
+      if (timelineCtx) {
+        window.timelineChart = new Chart(timelineCtx, {
+          type: 'line',
+          data: {
+            labels: [],
+            datasets: [{
+              label: 'Voter Registration',
+              data: [],
+              borderColor: 'rgba(255, 255, 255, 1)',
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  color: 'white'
+                },
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                }
+              },
+              x: {
+                ticks: {
+                  color: 'white'
+                },
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                labels: {
+                  color: 'white'
+                }
+              }
+            }
+          }
+        });
+      }
+      
+      // Region Chart
+      const regionCtx = document.getElementById('regionChart')?.getContext('2d');
+      if (regionCtx) {
+        window.regionChart = new Chart(regionCtx, {
+          type: 'pie',
+          data: {
+            labels: [],
+            datasets: [{
+              data: [],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)'
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                labels: {
+                  color: 'white'
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // ==============================
+// SweetAlert2 Notifications
+// ==============================
+
+// Confirm Winner with SweetAlert
+async function confirmWinner(candidate_id, position_id) {
+  try {
+    const result = await Swal.fire({
+      title: 'Confirm Winner',
+      text: 'Are you sure you want to confirm this candidate as the winner?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, confirm!',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#38a169',
+      cancelButtonColor: '#e53e3e'
+    });
+    
+    if (result.isConfirmed) {
+      const data = await apiCall(API_ENDPOINTS.confirmWinner, 'POST', { candidate_id, position_id });
+      
+      await Swal.fire({
+        title: 'Winner Confirmed!',
+        text: data.message || 'Candidate has been confirmed as winner!',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#38a169'
+      });
+      
+      loadResults();
+      loadCandidates();
+    }
+  } catch (err) {
+    console.error(err);
+    await Swal.fire({
+      title: 'Error!',
+      text: 'Failed to confirm winner.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#e53e3e'
+    });
+  }
+}
+
+// Reset All Data with SweetAlert
+async function confirmReset() {
+  const result = await Swal.fire({
+    title: 'Reset All Data?',
+    text: 'This will permanently delete ALL candidates, votes, and election data. This action cannot be undone!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, reset everything!',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#e53e3e',
+    cancelButtonColor: '#718096',
+    reverseButtons: true
+  });
+  
+  if (result.isConfirmed) {
+    try {
+      // API call to reset data would go here
+      await Swal.fire({
+        title: 'Data Reset!',
+        text: 'All system data has been successfully reset.',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#38a169'
+      });
+      
+      // Refresh the dashboard
+      updateStats();
+      loadCandidates();
+      loadResults();
+    } catch (err) {
+      await Swal.fire({
+        title: 'Reset Failed!',
+        text: 'There was an error resetting the data.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#e53e3e'
+      });
+    }
+  }
+}
+
+// Delete Account with SweetAlert
+async function confirmAccountDeletion() {
+  const { value: password } = await Swal.fire({
+    title: 'Delete Your Account?',
+    text: 'This will permanently delete your admin account and all associated data. To confirm, please enter your password:',
+    icon: 'warning',
+    input: 'password',
+    inputPlaceholder: 'Enter your password',
+    showCancelButton: true,
+    confirmButtonText: 'Delete My Account',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#e53e3e',
+    cancelButtonColor: '#718096',
+    inputValidator: (value) => {
+      if (!value) {
+        return 'Please enter your password to confirm deletion';
+      }
+    }
+  });
+  
+  if (password) {
+    try {
+      // API call to delete account would go here
+      await Swal.fire({
+        title: 'Account Deleted!',
+        text: 'Your admin account has been permanently deleted.',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#38a169'
+      });
+      
+      // Redirect to login page
+      window.location.href = '../login.html';
+    } catch (err) {
+      await Swal.fire({
+        title: 'Deletion Failed!',
+        text: 'There was an error deleting your account. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#e53e3e'
+      });
+    }
+  }
+}
+
+// Settings Save Confirmation with SweetAlert
+async function saveGeneralSettings() {
+  try {
+    // Save settings logic would go here
+    await Swal.fire({
+      title: 'Settings Saved!',
+      text: 'Your general settings have been successfully updated.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#38a169',
+      timer: 2000,
+      timerProgressBar: true
+    });
+  } catch (err) {
+    await Swal.fire({
+      title: 'Save Failed!',
+      text: 'There was an error saving your settings.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#e53e3e'
+    });
+  }
+}
+
+async function saveAppearanceSettings() {
+  try {
+    // Save appearance settings logic would go here
+    await Swal.fire({
+      title: 'Appearance Updated!',
+      text: 'Your appearance settings have been successfully saved.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#38a169',
+      timer: 2000,
+      timerProgressBar: true
+    });
+  } catch (err) {
+    await Swal.fire({
+      title: 'Save Failed!',
+      text: 'There was an error saving your appearance settings.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#e53e3e'
+    });
+  }
+}
+
+async function saveNotificationSettings() {
+  try {
+    // Save notification settings logic would go here
+    await Swal.fire({
+      title: 'Notifications Updated!',
+      text: 'Your notification preferences have been successfully saved.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#38a169',
+      timer: 2000,
+      timerProgressBar: true
+    });
+  } catch (err) {
+    await Swal.fire({
+      title: 'Save Failed!',
+      text: 'There was an error saving your notification settings.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#e53e3e'
+    });
+  }
+}
+
+async function saveSecuritySettings() {
+  try {
+    // Save security settings logic would go here
+    await Swal.fire({
+      title: 'Security Updated!',
+      text: 'Your security settings have been successfully saved.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#38a169',
+      timer: 2000,
+      timerProgressBar: true
+    });
+  } catch (err) {
+    await Swal.fire({
+      title: 'Save Failed!',
+      text: 'There was an error saving your security settings.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#e53e3e'
+    });
+  }
+}
+
+// Backup Creation with SweetAlert
+async function createBackup() {
+  try {
+    // Backup creation logic would go here
+    const result = await Swal.fire({
+      title: 'Create Backup?',
+      text: 'This will create a new system backup. This may take a few moments.',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: 'Create Backup',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#38a169',
+      cancelButtonColor: '#718096'
+    });
+    
+    if (result.isConfirmed) {
+      // Show loading state
+      Swal.fire({
+        title: 'Creating Backup...',
+        text: 'Please wait while we create your system backup.',
+        icon: 'info',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+      
+      // Simulate API call
+      setTimeout(async () => {
+        await Swal.fire({
+          title: 'Backup Created!',
+          text: 'Your system backup has been successfully created.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#38a169'
+        });
+      }, 2000);
+    }
+  } catch (err) {
+    await Swal.fire({
+      title: 'Backup Failed!',
+      text: 'There was an error creating the backup.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#e53e3e'
+    });
+  }
+}
+
+// Candidate Status Update with SweetAlert
+async function updateCandidateStatus(candidate_id, status) {
+  try {
+    let confirmText = '';
+    let confirmIcon = 'question';
+    
+    switch(status) {
+      case 'approved':
+        confirmText = 'Are you sure you want to approve this candidate?';
+        confirmIcon = 'success';
+        break;
+      case 'rejected':
+        confirmText = 'Are you sure you want to reject this candidate?';
+        confirmIcon = 'warning';
+        break;
+      case 'pending':
+        confirmText = 'Are you sure you want to mark this candidate as pending?';
+        confirmIcon = 'info';
+        break;
+    }
+    
+    const result = await Swal.fire({
+      title: 'Update Candidate Status?',
+      text: confirmText,
+      icon: confirmIcon,
+      showCancelButton: true,
+      confirmButtonText: 'Yes, update status!',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#38a169',
+      cancelButtonColor: '#718096'
+    });
+    
+    if (result.isConfirmed) {
+      const data = await apiCall(API_ENDPOINTS.updateCandidateStatus, 'PATCH', { candidate_id, status });
+      
+      let successText = '';
+      let successIcon = 'success';
+      
+      switch(status) {
+        case 'approved':
+          successText = `Candidate #${candidate_id} has been approved`;
+          break;
+        case 'rejected':
+          successText = `Candidate #${candidate_id} has been rejected`;
+          break;
+        case 'pending':
+          successText = `Candidate #${candidate_id} marked as pending`;
+          successIcon = 'info';
+          break;
+      }
+      
+      await Swal.fire({
+        title: 'Status Updated!',
+        text: successText,
+        icon: successIcon,
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#38a169',
+        timer: 2000,
+        timerProgressBar: true
+      });
+      
+      // Update the UI
+      loadCandidates(candidate_id);
+      updateStats();
+      
+      // Close modal if open
+      document.getElementById('candidateModal').classList.remove('active');
+    }
+  } catch (err) {
+    console.error(err);
+    await Swal.fire({
+      title: 'Update Failed!',
+      text: 'Failed to update candidate status.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#e53e3e'
+    });
+  }
+}
+    // ==============================
+    // Auto Refresh (Real-time updates)
+    // ==============================
+    function startAutoRefresh(interval = 15000) {
+      setInterval(() => {
+        const activeSection = document.querySelector('.menu-item.active')?.getAttribute('data-section');
+        if (activeSection === 'candidates') loadCandidates();
+        if (activeSection === 'results') loadResults();
+        if (activeSection === 'voter-statistics') updateVoterDashboard();
+        updateStats();
+      }, interval);
+    }
+
+    // ==============================
+    // DOMContentLoaded
+    // ==============================
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchPositions();
+      fetchElections();
+      loadCandidates();
+      loadResults();
+      updateStats();
+      setupNavigation();
+      setupSettingsNavigation();
+      setupThemeSelection();
+      setupDropdowns();
+      setupMobileMenu();
+      initializeVoterCharts();
+      updateVoterDashboard();
+      startAutoRefresh(15000);
+      
+      // Show welcome toast
+      setTimeout(() => {
+        showToast('info', 'Welcome Back', 'Your admin dashboard is ready');
+      }, 1000);
+    });
+  </script>
+
+
+<script>
+async function saveGeneralSettings() {
+    const payload = {
+        systemName: document.getElementById("systemName").value,
+        adminEmail: document.getElementById("adminEmail").value,
+        timezone: document.getElementById("timezone").value,
+        dateFormat: document.getElementById("dateFormat").value
+    };
+
+    try {
+        const res = await fetch("http://localhost:3000/admin/settings/general", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            showToast("success", "Settings Saved", "General settings updated successfully");
+        } else {
+            showToast("error", "Error", data.message || "Could not save settings");
+        }
+
+    } catch (err) {
+        showToast("error", "Network Error", "Could not reach server");
+    }
+}
+</script>
+
+</body>
+</html>

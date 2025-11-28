@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Election 2024</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --dark-lighter: #334155;
+            --gray: #94a3b8;
+            --light: #f8fafc;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--dark-light) 0%, var(--dark-lighter) 100%);
+            padding: 30px 0;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 28px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .election-info {
+            text-align: right;
+        }
+
+        .election-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .election-subtitle {
+            font-size: 16px;
+            color: var(--gray);
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        /* Position Section Styles */
+        .position-section {
+            margin-bottom: 50px;
+            background: var(--dark-light);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            border-left: 5px solid var(--primary);
+        }
+
+        .position-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--dark-lighter);
+        }
+
+        .position-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .position-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .position-description {
+            color: var(--gray);
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        /* Candidate Grid */
+        .candidate-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .candidate-card {
+            background: var(--dark-lighter);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .candidate-card.selected {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .candidate-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--dark-light);
+        }
+
+        .candidate-info {
+            padding: 20px;
+        }
+
+        .candidate-name {
+            font-weight: 700;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .candidate-party {
+            font-size: 16px;
+            color: var(--gray);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .party-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--primary);
+            color: white;
+        }
+
+        .candidate-tagline {
+            font-size: 14px;
+            color: var(--primary);
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .vote-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .vote-radio {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--success);
+        }
+
+        .vote-label {
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Profile Details */
+        .profile-details {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--dark-light);
+            display: none;
+        }
+
+        .candidate-card.expanded .profile-details {
+            display: block;
+        }
+
+        .detail-section {
+            margin-bottom: 15px;
+        }
+
+        .detail-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray);
+        }
+
+        .platform-list {
+            list-style-type: none;
+        }
+
+        .platform-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .platform-list li:before {
+            content: "•";
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+        }
+
+        .toggle-profile-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--dark-light);
+            color: var(--primary);
+            border: none;
+            border-top: 1px solid var(--dark-lighter);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .toggle-profile-btn:hover {
+            background: #475569;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .submit-btn {
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            color: var(--gray);
+            font-size: 14px;
+            padding-top: 20px;
+            border-top: 1px solid var(--dark-lighter);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--dark-lighter);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .modal-success .modal-icon {
+            color: var(--success);
+        }
+
+        .modal-warning .modal-icon {
+            color: var(--warning);
+        }
+
+        .modal-error .modal-icon {
+            color: var(--danger);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .modal-text {
+            margin-bottom: 25px;
+            line-height: 1.6;
+            color: var(--gray);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 16px;
+            min-width: 120px;
+        }
+
+        .modal-btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .modal-btn-secondary {
+            background: var(--dark-light);
+            color: var(--light);
+            border: 1px solid #475569;
+        }
+
+        .modal-btn-secondary:hover {
+            background: #475569;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--light);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .election-info {
+                text-align: center;
+            }
+            
+            .stats {
+                justify-content: space-around;
+            }
+            
+            .position-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .position-icon {
+                margin-right: 0;
+            }
+            
+            .candidate-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .position-section {
+                padding: 20px;
+            }
+            
+            .position-title {
+                font-size: 20px;
+            }
+            
+            .candidate-name {
+                font-size: 18px;
+            }
+            
+            .submit-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Accessibility Improvements */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .candidate-card:focus-within {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .vote-radio:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-vote-yea"></i>
+                    </div>
+                    <div class="logo-text">CampusVote</div>
+                </div>
+                
+                <div class="election-info">
+                    <h1 class="election-title">2024 University Elections</h1>
+                    <p class="election-subtitle">Your voice shapes our campus future</p>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Positions</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">20</div>
+                        <div class="stat-label">Candidates</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">2,847</div>
+                        <div class="stat-label">Votes Cast</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">5h 22m</div>
+                        <div class="stat-label">Time Left</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+    <main class="container">
+        <form id="electionForm" action="/submit-vote" method="POST">
+            <!-- Presidential Candidates Section -->
+            <section class="position-section" id="president-section">
+                <div class="position-header">
+                    <div class="position-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div>
+                        <h2 class="position-title">Presidential Candidates</h2>
+                        <p class="position-description">Head of the student union or council. Represents all students at official meetings with administration. Oversees student activities and leads the executive team.</p>
+                    </div>
+                </div>
+                
+                <div class="candidate-grid">
+                    <!-- Candidate 1 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Wilson Chen" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Wilson Chen</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Unity Party</span>
+                            </div>
+                            <p class="candidate-tagline">"Together we build a stronger community"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="president-1" name="president" value="1" class="vote-radio" required>
+                                <label for="president-1" class="vote-label">Vote for Wilson</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Wilson is a third-year Political Science major with a minor in Economics. He has served as Class Representative for two years and has been actively involved in campus organizations.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Increase student involvement in campus decision-making</li>
+                                            <li>Expand mental health resources and support services</li>
+                                            <li>Improve campus facilities and study spaces</li>
+                                            <li>Create more internship and career development opportunities</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Class Representative (2022-Present), Student Activities Committee Member, Debate Team Captain</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="president_position" value="president">
+                        </div>
+                    </div>
+                    
+                    <!-- Candidate 2 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Sarah Johnson" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Sarah Johnson</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Progress Alliance</span>
+                            </div>
+                            <p class="candidate-tagline">"Innovation and inclusion for all students"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="president-2" name="president" value="2" class="vote-radio" required>
+                                <label for="president-2" class="vote-label">Vote for Sarah</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Sarah is a fourth-year Computer Science major with extensive experience in student leadership. She has organized multiple successful campus events and initiatives.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Implement sustainable campus initiatives and reduce waste</li>
+                                            <li>Enhance technology resources and digital learning tools</li>
+                                            <li>Promote diversity, equity, and inclusion across campus</li>
+                                            <li>Strengthen connections between students and local community</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Tech Club President, Sustainability Initiative Coordinator, Student Ambassador for Admissions</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="president_position" value="president">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Vice Presidential Candidates Section -->
+            <section class="position-section" id="vice-president-section">
+                <div class="position-header">
+                    <div class="position-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div>
+                        <h2 class="position-title">Vice Presidential Candidates</h2>
+                        <p class="position-description">Assists the president and acts in their absence. Coordinates student committees or projects.</p>
+                    </div>
+                </div>
+                
+                <div class="candidate-grid">
+                    <!-- Candidate 1 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Maria Rodriguez" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Maria Rodriguez</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Unity Party</span>
+                            </div>
+                            <p class="candidate-tagline">"Connecting students with opportunities"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="vice-president-1" name="vice_president" value="3" class="vote-radio" required>
+                                <label for="vice-president-1" class="vote-label">Vote for Maria</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Maria is a third-year Business Administration student with a focus on organizational leadership. She has been actively involved in student government since her freshman year.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Improve communication between student government and student body</li>
+                                            <li>Create more leadership opportunities for underclassmen</li>
+                                            <li>Streamline student organization funding processes</li>
+                                            <li>Enhance campus event planning and coordination</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Student Senator (2022-Present), Campus Events Committee Chair, Leadership Development Program Mentor</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="vice_president_position" value="vice_president">
+                        </div>
+                    </div>
+                    
+                    <!-- Candidate 2 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of David Kim" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">David Kim</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Progress Alliance</span>
+                            </div>
+                            <p class="candidate-tagline">"Building bridges between students and faculty"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="vice-president-2" name="vice_president" value="4" class="vote-radio" required>
+                                <label for="vice-president-2" class="vote-label">Vote for David</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>David is a fourth-year Engineering student with a passion for student advocacy. He has served in various student government roles throughout his college career.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Strengthen academic advising and support services</li>
+                                            <li>Increase transparency in university decision-making</li>
+                                            <li>Promote interdisciplinary collaboration among student groups</li>
+                                            <li>Advocate for improved campus technology infrastructure</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Engineering Student Council President, University Curriculum Committee Student Representative, Tech Innovation Club Founder</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="vice_president_position" value="vice_president">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Secretary General Candidates Section -->
+            <section class="position-section" id="secretary-section">
+                <div class="position-header">
+                    <div class="position-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div>
+                        <h2 class="position-title">Secretary General Candidates</h2>
+                        <p class="position-description">Keeps records of meetings (minutes). Handles official correspondence. Ensures proper communication between student government and the student body.</p>
+                    </div>
+                </div>
+                
+                <div class="candidate-grid">
+                    <!-- Candidate 1 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Emily Watson" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Emily Watson</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Unity Party</span>
+                            </div>
+                            <p class="candidate-tagline">"Organized communication for an effective student government"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="secretary-1" name="secretary" value="5" class="vote-radio" required>
+                                <label for="secretary-1" class="vote-label">Vote for Emily</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Emily is a third-year Communications major with a minor in Political Science. She has served as the secretary for two campus organizations and has experience in event planning and documentation.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Implement a transparent record-keeping system accessible to all students</li>
+                                            <li>Create a centralized communication hub for student government updates</li>
+                                            <li>Streamline the process for student concerns and suggestions</li>
+                                            <li>Improve meeting efficiency through better preparation and documentation</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Debate Club Secretary (2022-Present), Student Newspaper Editor, Campus Communication Committee Member</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="secretary_position" value="secretary">
+                        </div>
+                    </div>
+                    
+                    <!-- Candidate 2 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Jessica Lee" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Jessica Lee</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Progress Alliance</span>
+                            </div>
+                            <p class="candidate-tagline">"Clear communication for a connected campus"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="secretary-2" name="secretary" value="6" class="vote-radio" required>
+                                <label for="secretary-2" class="vote-label">Vote for Jessica</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Jessica is a fourth-year Journalism student with experience in digital media and communications. She has worked on multiple campus-wide communication campaigns.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Develop a comprehensive digital communication strategy for student government</li>
+                                            <li>Create accessible meeting minutes with clear action items</li>
+                                            <li>Establish regular student feedback sessions</li>
+                                            <li>Improve transparency in student government decision-making</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Campus Radio Station Manager, Student Government Communication Intern, Digital Media Club President</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="secretary_position" value="secretary">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Treasurer Candidates Section -->
+            <section class="position-section" id="treasurer-section">
+                <div class="position-header">
+                    <div class="position-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div>
+                        <h2 class="position-title">Treasurer Candidates</h2>
+                        <p class="position-description">Manages the student body's finances. Prepares budgets and reports on expenditures.</p>
+                    </div>
+                </div>
+                
+                <div class="candidate-grid">
+                    <!-- Candidate 1 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Michael Thompson" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Michael Thompson</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Unity Party</span>
+                            </div>
+                            <p class="candidate-tagline">"Responsible financial management for student success"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="treasurer-1" name="treasurer" value="7" class="vote-radio" required>
+                                <label for="treasurer-1" class="vote-label">Vote for Michael</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Michael is a third-year Finance major with experience in budget management and financial planning. He has managed budgets for multiple student organizations.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Implement transparent financial reporting accessible to all students</li>
+                                            <li>Create a fair and efficient funding allocation process for student organizations</li>
+                                            <li>Develop financial literacy workshops for student leaders</li>
+                                            <li>Establish a contingency fund for unexpected student needs</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Finance Club Treasurer, Student Organization Budget Committee Chair, Campus Business Society Vice President</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="treasurer_position" value="treasurer">
+                        </div>
+                    </div>
+                    
+                    <!-- Candidate 2 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Olivia Parker" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Olivia Parker</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Progress Alliance</span>
+                            </div>
+                            <p class="candidate-tagline">"Strategic funding for student initiatives"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="treasurer-2" name="treasurer" value="8" class="vote-radio" required>
+                                <label for="treasurer-2" class="vote-label">Vote for Olivia</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Olivia is a fourth-year Economics student with a minor in Accounting. She has experience in financial analysis and has worked on fundraising campaigns for campus organizations.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Create a more accessible and simplified funding application process</li>
+                                            <li>Increase funding for underrepresented student groups and initiatives</li>
+                                            <li>Implement quarterly financial reports with clear visualizations</li>
+                                            <li>Develop partnerships with local businesses for additional funding sources</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Economics Society President, Student Fundraising Committee Chair, Campus Budget Advisory Board Student Representative</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="treasurer_position" value="treasurer">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Public Relations Officer Candidates Section -->
+            <section class="position-section" id="pro-section">
+                <div class="position-header">
+                    <div class="position-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div>
+                        <h2 class="position-title">Public Relations Officer Candidates</h2>
+                        <p class="position-description">Handles announcements, posters, and social media updates. Maintains the public image of the student government.</p>
+                    </div>
+                </div>
+                
+                <div class="candidate-grid">
+                    <!-- Candidate 1 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Alex Morgan" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Alex Morgan</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Unity Party</span>
+                            </div>
+                            <p class="candidate-tagline">"Amplifying student voices across campus"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="pro-1" name="pro" value="9" class="vote-radio" required>
+                                <label for="pro-1" class="vote-label">Vote for Alex</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Alex is a third-year Marketing major with experience in social media management and public relations. They have successfully promoted multiple campus events and initiatives.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Revamp student government social media presence with regular, engaging content</li>
+                                            <li>Create a comprehensive communication calendar for all campus events</li>
+                                            <li>Develop partnerships with campus media outlets</li>
+                                            <li>Implement a feedback system to measure communication effectiveness</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Marketing Club President, Campus Event Promotion Team Lead, Student Blog Editor</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="pro_position" value="pro">
+                        </div>
+                    </div>
+                    
+                    <!-- Candidate 2 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Sophia Williams" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Sophia Williams</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Progress Alliance</span>
+                            </div>
+                            <p class="candidate-tagline">"Connecting campus through creative communication"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="pro-2" name="pro" value="10" class="vote-radio" required>
+                                <label for="pro-2" class="vote-label">Vote for Sophia</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Sophia is a fourth-year Graphic Design student with a minor in Communications. She has created visual campaigns for multiple campus organizations and events.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Develop a consistent visual identity for student government communications</li>
+                                            <li>Create engaging multimedia content for various platforms</li>
+                                            <li>Establish a student ambassador program to improve outreach</li>
+                                            <li>Implement regular surveys to understand student communication preferences</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Graphic Design Club President, Campus Magazine Art Director, Social Media Committee Chair</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="pro_position" value="pro">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Academic Affairs Representative Candidates Section -->
+            <section class="position-section" id="academic-section">
+                <div class="position-header">
+                    <div class="position-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h2 class="position-title">Academic Affairs Representative Candidates</h2>
+                        <p class="position-description">Represents student concerns about academic issues such as exams, lecturers, and study materials.</p>
+                    </div>
+                </div>
+                
+                <div class="candidate-grid">
+                    <!-- Candidate 1 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Daniel Brown" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Daniel Brown</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Unity Party</span>
+                            </div>
+                            <p class="candidate-tagline">"Advocating for academic excellence and student success"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="academic-1" name="academic" value="11" class="vote-radio" required>
+                                <label for="academic-1" class="vote-label">Vote for Daniel</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Daniel is a third-year Education major with a focus on curriculum development. He has served as a student representative on the Academic Standards Committee.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Advocate for more flexible exam scheduling and formats</li>
+                                            <li>Improve access to academic resources and study materials</li>
+                                            <li>Create a faculty evaluation system that includes student feedback</li>
+                                            <li>Expand academic support services and tutoring programs</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Academic Standards Committee Student Representative, Peer Tutoring Program Coordinator, Education Society Vice President</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="academic_position" value="academic">
+                        </div>
+                    </div>
+                    
+                    <!-- Candidate 2 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Rachel Green" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Rachel Green</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Progress Alliance</span>
+                            </div>
+                            <p class="candidate-tagline">"Innovative solutions for academic challenges"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="academic-2" name="academic" value="12" class="vote-radio" required>
+                                <label for="academic-2" class="vote-label">Vote for Rachel</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Rachel is a fourth-year Psychology student with experience in academic research and student advocacy. She has worked on improving mental health support for students during exam periods.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Implement a standardized course evaluation system with meaningful impact</li>
+                                            <li>Advocate for more diverse and inclusive curriculum content</li>
+                                            <li>Create better support systems for students with learning differences</li>
+                                            <li>Develop partnerships with alumni for academic mentorship programs</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Psychology Research Assistant, Student Academic Advocacy Group Founder, Mental Health Awareness Campaign Coordinator</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="academic_position" value="academic">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Welfare Officer Candidates Section -->
+            <section class="position-section" id="welfare-section">
+                <div class="position-header">
+                    <div class="position-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div>
+                        <h2 class="position-title">Welfare Officer Candidates</h2>
+                        <p class="position-description">Handles issues related to student well-being (accommodation, health, and social needs).</p>
+                    </div>
+                </div>
+                
+                <div class="candidate-grid">
+                    <!-- Candidate 1 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Chloe Martinez" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Chloe Martinez</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Unity Party</span>
+                            </div>
+                            <p class="candidate-tagline">"A caring community for every student"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="welfare-1" name="welfare" value="13" class="vote-radio" required>
+                                <label for="welfare-1" class="vote-label">Vote for Chloe</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Chloe is a third-year Social Work student with experience in peer support and community organizing. She has volunteered with multiple campus support services.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Expand mental health resources and reduce wait times for counseling services</li>
+                                            <li>Improve on-campus housing conditions and resident support</li>
+                                            <li>Create a peer support network for international students</li>
+                                            <li>Develop programs to address food insecurity among students</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Peer Support Volunteer, Campus Food Drive Coordinator, Resident Assistant, Social Work Society President</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="welfare_position" value="welfare">
+                        </div>
+                    </div>
+                    
+                    <!-- Candidate 2 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Kevin Patel" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Kevin Patel</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Progress Alliance</span>
+                            </div>
+                            <p class="candidate-tagline">"Holistic support for student well-being"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="welfare-2" name="welfare" value="14" class="vote-radio" required>
+                                <label for="welfare-2" class="vote-label">Vote for Kevin</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Kevin is a fourth-year Public Health student with a focus on community health initiatives. He has worked on multiple campus wellness campaigns and has experience in crisis support.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Implement a 24/7 mental health support hotline</li>
+                                            <li>Create wellness workshops addressing stress management and self-care</li>
+                                            <li>Improve accessibility services for students with disabilities</li>
+                                            <li>Develop a comprehensive sexual health and consent education program</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Public Health Society President, Campus Wellness Initiative Coordinator, Crisis Hotline Volunteer, Disability Services Committee Member</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="welfare_position" value="welfare">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Sports & Entertainment Secretary Candidates Section -->
+            <section class="position-section" id="sports-section">
+                <div class="position-header">
+                    <div class="position-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <div>
+                        <h2 class="position-title">Sports & Entertainment Secretary Candidates</h2>
+                        <p class="position-description">Organizes sports tournaments and social events (concerts, talent shows, etc.).</p>
+                    </div>
+                </div>
+                
+                <div class="candidate-grid">
+                    <!-- Candidate 1 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Tyler Johnson" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Tyler Johnson</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Unity Party</span>
+                            </div>
+                            <p class="candidate-tagline">"More events, more fun, more campus spirit"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="sports-1" name="sports" value="Tyler Johnson" class="vote-radio" required>
+                                <label for="sports-1" class="vote-label">Vote for Tyler</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Tyler is a third-year Sports Management student with experience in event planning and campus recreation. He has organized multiple intramural sports tournaments and social events.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Expand intramural sports offerings to include more diverse activities</li>
+                                            <li>Organize monthly campus-wide social events and concerts</li>
+                                            <li>Create inclusive sports programs for students of all ability levels</li>
+                                            <li>Develop partnerships with local venues for off-campus events</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Intramural Sports Coordinator, Campus Events Committee Member, Sports Management Club President</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="sports_position" value="sports">
+                        </div>
+                    </div>
+                    
+                    <!-- Candidate 2 -->
+                    <div class="candidate-card">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                             alt="Portrait of Maya Rodriguez" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">Maya Rodriguez</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">Progress Alliance</span>
+                            </div>
+                            <p class="candidate-tagline">"Creative events for a vibrant campus community"</p>
+                            
+                            <div class="vote-option">
+                                <input type="radio" id="sports-2" name="sports" value="16" class="vote-radio" required>
+                                <label for="sports-2" class="vote-label">Vote for Maya</label>
+                            </div>
+                            
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-user-graduate"></i>
+                                        Background
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Maya is a fourth-year Theater Arts student with extensive experience in event production and performance. She has directed multiple campus productions and organized cultural events.</p>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-bullseye"></i>
+                                        Key Platform Points
+                                    </div>
+                                    <div class="detail-content">
+                                        <ul class="platform-list">
+                                            <li>Create a diverse calendar of cultural and artistic events</li>
+                                            <li>Establish regular open mic nights and talent showcases</li>
+                                            <li>Develop inclusive recreational activities beyond traditional sports</li>
+                                            <li>Implement a student feedback system for event planning</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title">
+                                        <i class="fas fa-trophy"></i>
+                                        Experience
+                                    </div>
+                                    <div class="detail-content">
+                                        <p>Theater Production Manager, Cultural Festival Organizer, Arts Committee Chair, Campus Talent Show Director</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="sports_position" value="sports">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Form Submission -->
+            <div class="form-actions">
+                <button type="submit" class="submit-btn" id="submitVote">
+                    <i class="fas fa-paper-plane"></i>
+                    Submit Your Ballot
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer class="container">
+        <p>© 2024 University Election System | <a href="#" style="color: var(--primary); text-decoration: none;">Privacy Policy</a> | <a href="#" style="color: var(--primary); text-decoration: none;">Help Center</a></p>
+    </footer>
+
+    <!-- Modern Modal for Notifications -->
+    <div class="modal" id="notificationModal">
+        <div class="modal-content" id="modalContent">
+            <button class="close-modal" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-icon" id="modalIcon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h2 class="modal-title" id="modalTitle">Notification</h2>
+            <p class="modal-text" id="modalText">This is a notification message.</p>
+            <div class="modal-buttons" id="modalButtons">
+                <button class="modal-btn modal-btn-primary" id="modalConfirm">OK</button>
+                <button class="modal-btn modal-btn-secondary" id="modalCancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+ <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('electionForm');
+    const submitBtn = document.getElementById('submitVote');
+    const modal = document.getElementById('notificationModal');
+    const modalContent = document.getElementById('modalContent');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalText = document.getElementById('modalText');
+    const modalIcon = document.getElementById('modalIcon');
+    const modalConfirm = document.getElementById('modalConfirm');
+    const modalCancel = document.getElementById('modalCancel');
+    const closeModal = document.getElementById('closeModal');
+    const candidateContainer = document.getElementById('candidateContainer');
+
+    // -------------------------------
+    // Modal Functions
+    // -------------------------------
+    function showModal(type, title, message, options = {}) {
+        modalTitle.textContent = title;
+        modalText.textContent = message;
+        modalContent.className = 'modal-content';
+        if (type === 'success') {
+            modalContent.classList.add('modal-success');
+            modalIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+        } else if (type === 'warning') {
+            modalContent.classList.add('modal-warning');
+            modalIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+        } else if (type === 'error') {
+            modalContent.classList.add('modal-error');
+            modalIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
+        }
+
+        modalConfirm.style.display = options.confirmText ? 'inline-block' : 'none';
+        modalConfirm.textContent = options.confirmText || '';
+        modalCancel.style.display = options.cancelText ? 'inline-block' : 'none';
+        modalCancel.textContent = options.cancelText || '';
+
+        modalConfirm.onclick = options.onConfirm || hideModal;
+        modalCancel.onclick = options.onCancel || hideModal;
+
+        modal.style.display = 'flex';
+    }
+
+    function hideModal() { modal.style.display = 'none'; }
+
+    closeModal.addEventListener('click', hideModal);
+    window.addEventListener('click', e => { if (e.target === modal) hideModal(); });
+
+    // -------------------------------
+    // Load Candidates from Backend
+    // -------------------------------
+    async function loadCandidates() {
+        try {
+            const res = await fetch('/api/candidates-public');
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message || 'Failed to load candidates');
+
+            candidateContainer.innerHTML = '';
+
+            for (const position in data.data) {
+                const candidates = data.data[position];
+
+                const section = document.createElement('section');
+                section.className = 'position-section';
+                section.id = `${position}-section`;
+
+                let positionTitle = position.replace(/_/g, ' ');
+                positionTitle = positionTitle.charAt(0).toUpperCase() + positionTitle.slice(1);
+
+                section.innerHTML = `
+                    <div class="position-header">
+                        <div class="position-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h2 class="position-title">${positionTitle} Candidates</h2>
+                            <p class="position-description">Please select one candidate for this position.</p>
+                        </div>
+                    </div>
+                    <div class="candidate-grid"></div>
+                `;
+
+                const grid = section.querySelector('.candidate-grid');
+
+                candidates.forEach(c => {
+                    const card = document.createElement('div');
+                    card.className = 'candidate-card';
+                    card.innerHTML = `
+                        <img src="${c.photo}" alt="Portrait of ${c.name}" class="candidate-image">
+                        <div class="candidate-info">
+                            <h3 class="candidate-name">${c.name}</h3>
+                            <div class="candidate-party">
+                                <span class="party-badge">${c.party}</span>
+                            </div>
+                            <p class="candidate-tagline">${c.tagline}</p>
+                            <div class="vote-option">
+                                <input type="radio" id="${position}-${c.id}" name="${position}" value="${c.id}" class="vote-radio" required>
+                                <label for="${position}-${c.id}" class="vote-label">Vote for ${c.name}</label>
+                            </div>
+                            <button type="button" class="toggle-profile-btn">
+                                <span class="toggle-text">Show Profile</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </button>
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <div class="detail-title"><i class="fas fa-user-graduate"></i> Background</div>
+                                    <div class="detail-content"><p>${c.background}</p></div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title"><i class="fas fa-bullseye"></i> Key Platform Points</div>
+                                    <div class="detail-content"><ul class="platform-list">${c.platform.map(p => `<li>${p}</li>`).join('')}</ul></div>
+                                </div>
+                                <div class="detail-section">
+                                    <div class="detail-title"><i class="fas fa-trophy"></i> Experience</div>
+                                    <div class="detail-content"><p>${c.experience}</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                candidateContainer.appendChild(section);
+            }
+
+            initializeCandidateSelection();
+        } catch (err) {
+            console.error(err);
+            showModal('error', 'Load Error', err.message, { confirmText: 'OK' });
+        }
+    }
+
+    // -------------------------------
+    // Candidate Selection & Toggle
+    // -------------------------------
+    function initializeCandidateSelection() {
+        const candidateCards = document.querySelectorAll('.candidate-card');
+        const toggleButtons = document.querySelectorAll('.toggle-profile-btn');
+
+        candidateCards.forEach(card => {
+            const radio = card.querySelector('.vote-radio');
+            radio.addEventListener('change', () => {
+                const name = radio.name;
+                document.querySelectorAll(`input[name="${name}"]`).forEach(input => input.closest('.candidate-card').classList.remove('selected'));
+                if (radio.checked) card.classList.add('selected');
+            });
+
+            card.addEventListener('click', e => {
+                if (e.target.type !== 'radio' && !e.target.classList.contains('vote-label') &&
+                    !e.target.classList.contains('toggle-profile-btn') && !e.target.closest('.toggle-profile-btn')) {
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+
+        toggleButtons.forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const card = btn.closest('.candidate-card');
+                const toggleText = btn.querySelector('.toggle-text');
+                const toggleIcon = btn.querySelector('.toggle-icon');
+                if (card.classList.contains('expanded')) {
+                    card.classList.remove('expanded');
+                    toggleText.textContent = 'Show Profile';
+                    toggleIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                } else {
+                    card.classList.add('expanded');
+                    toggleText.textContent = 'Hide Profile';
+                    toggleIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                }
+            });
+        });
+    }
+
+    // -------------------------------
+    // Form Submission
+    // -------------------------------
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const positionGroups = Object.keys(document.querySelectorAll('.position-section'));
+        const selectedRadios = document.querySelectorAll('.vote-radio:checked');
+
+        if (selectedRadios.length === 0) {
+            showModal('warning', 'Incomplete Ballot', 'Please select at least one candidate before submitting.', { confirmText: 'OK' });
+            return;
+        }
+
+        const voteData = {};
+        selectedRadios.forEach(r => voteData[r.name] = r.value);
+
+        showModal('success', 'Confirm Your Vote', 'Are you sure you want to submit your vote? This action cannot be undone.', {
+            confirmText: 'Yes, Submit',
+            cancelText: 'Review Again',
+            onConfirm: () => {
+                fetch('/api/submit-vote', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(voteData)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        showModal('success', 'Vote Submitted', data.message, {
+                            confirmText: 'OK',
+                            onConfirm: () => {
+                                form.reset();
+                                document.querySelectorAll('.candidate-card').forEach(card => card.classList.remove('selected', 'expanded'));
+                                hideModal();
+                            }
+                        });
+                    } else {
+                        showModal('error', 'Submission Error', data.message || 'An error occurred. Please try again.', { confirmText: 'OK' });
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    showModal('error', 'Submission Error', 'Something went wrong while submitting your vote.', { confirmText: 'OK' });
+                });
+            },
+            onCancel: hideModal
+        });
+    });
+
+    // -------------------------------
+    // Pulse Animation
+    // -------------------------------
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // -------------------------------
+    // Load Candidates on Page Load
+    // -------------------------------
+    loadCandidates();
+});
+</script>
+
+</body>
+</html>

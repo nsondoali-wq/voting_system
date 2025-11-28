@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Dashboard | Voting System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { 
+      box-sizing: border-box; 
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .dashboard {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(25px);
+      border-radius: 30px;
+      padding: 50px 40px;
+      width: 100%;
+      max-width: 1200px;
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      color: #fff;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      animation: dashboardEntrance 1s ease-out;
+    }
+
+    @keyframes dashboardEntrance {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .dashboard::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
+      z-index: -1;
+      animation: rotate 30s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .header {
+      margin-bottom: 50px;
+      position: relative;
+    }
+
+    h2 {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      font-weight: 800;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(135deg, #fff 0%, #FFD700 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 10%;
+      width: 80%;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #FFD700, transparent);
+      border-radius: 2px;
+    }
+
+    .subtitle {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      margin-bottom: 20px;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .user-info {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 20px 30px;
+      display: inline-block;
+      margin-bottom: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .user-info:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .user-info::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 255, 255, 0.05));
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .user-info:hover::before {
+      opacity: 1;
+    }
+
+    .user-info strong {
+      color: #FFD700;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 35px 25px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      animation: cardEntrance 0.8s ease-out;
+      animation-fill-mode: both;
+    }
+
+    @keyframes cardEntrance {
+      from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #4CAF50, #2196F3, #FFD700);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s ease;
+    }
+
+    .card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-15px) scale(1.03);
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .card:hover::after {
+      opacity: 1;
+    }
+
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 25px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.2);
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      z-index: 2;
+    }
+
+    .card:hover .card-icon {
+      transform: scale(1.1) rotate(5deg);
+      background: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card-description {
+      font-size: 1rem;
+      opacity: 0.9;
+      line-height: 1.5;
+      position: relative;
+      z-index: 2;
+    }
+
+    .role-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover .role-badge {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .footer {
+      margin-top: 60px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 1rem;
+      opacity: 0.7;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Sparkle effect */
+    .sparkle {
+      position: absolute;
+      pointer-events: none;
+      width: 12px;
+      height: 12px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 15px 3px white;
+      opacity: 0;
+      z-index: 10;
+    }
+
+    @keyframes sparkle {
+      0% {
+        transform: translate(0, 0) scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx, 0), var(--ty, 0)) scale(1);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        padding: 40px 25px;
+        margin: 15px;
+      }
+      
+      h2 {
+        font-size: 2.5rem;
+      }
+      
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+      
+      .card {
+        padding: 30px 20px;
+      }
+
+      .card-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      
+      .dashboard {
+        padding: 30px 20px;
+      }
+      
+      h2 {
+        font-size: 2rem;
+      }
+      
+      .user-info {
+        padding: 15px 20px;
+        font-size: 0.9rem;
+      }
+
+      .card-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div class="header">
+      <h2>Voting Portal</h2>
+      <p class="subtitle">Your secure platform for democratic participation</p>
+      <div class="user-info" id="welcomeText">
+        Welcome, <strong>User</strong> | Role: <strong>Role</strong>
+      </div>
+    </div>
+
+    <div class="grid">
+      <a href="vote.html" class="card role-student">
+        <div class="card-icon">
+          <i class="fas fa-vote-yea"></i>
+        </div>
+        <div class="card-title">Vote Now</div>
+        <div class="card-description">Cast your vote in the current election</div>
+        <div class="role-badge">Student</div>
+      </a>
+
+      <a href="results.html" class="card">
+        <div class="card-icon">
+          <i class="fas fa-chart-pie"></i>
+        </div>
+        <div class="card-title">View Results</div>
+        <div class="card-description">See live and past election results</div>
+      </a>
+
+      <a href="logout.html" class="card">
+        <div class="card-icon">
+          <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <div class="card-title">Logout</div>
+        <div class="card-description">Securely exit the voting system</div>
+      </a>
+    </div>
+
+    <div class="footer">
+      <p>Secure Voting System &copy; 2025 | All rights reserved</p>
+    </div>
+  </div>
+
+
+ <script>
+  // Create floating particles
+  function createParticles() {
+    const particlesContainer = document.getElementById('particles');
+    const particleCount = 20;
+    
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      
+      const size = Math.random() * 80 + 20;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      
+      particle.style.left = `${Math.random() * 100}vw`;
+      particle.style.top = `${Math.random() * 100}vh`;
+      
+      particle.style.animationDelay = `${Math.random() * 20}s`;
+      particle.style.animationDuration = `${20 + Math.random() * 20}s`;
+      
+      particlesContainer.appendChild(particle);
+    }
+  }
+
+  // Create sparkle effect
+  function createSparkleEffect(element) {
+    const rect = element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < 10; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      
+      const angle = (i / 10) * Math.PI * 2;
+      const distance = 40 + Math.random() * 30;
+      const tx = Math.cos(angle) * distance;
+      const ty = Math.sin(angle) * distance;
+      
+      sparkle.style.setProperty('--tx', `${tx}px`);
+      sparkle.style.setProperty('--ty', `${ty}px`);
+      sparkle.style.left = `${centerX}px`;
+      sparkle.style.top = `${centerY}px`;
+      
+      const colors = ['#FFD700', '#FFA500', '#FFFFFF', '#4CAF50', '#2196F3'];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      sparkle.style.background = color;
+      sparkle.style.boxShadow = `0 0 15px 3px ${color}`;
+      
+      document.body.appendChild(sparkle);
+      
+      sparkle.style.animation = `sparkle 0.8s ease-out forwards`;
+      
+      setTimeout(() => {
+        if (sparkle.parentNode) {
+          sparkle.parentNode.removeChild(sparkle);
+        }
+      }, 800);
+    }
+  }
+
+  // Add hover effect to cards
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      createSparkleEffect(this);
+    });
+  });
+
+  // Initialize dashboard effects
+  function initDashboardEffects() {
+    createParticles();
+  }
+
+  document.addEventListener('DOMContentLoaded', initDashboardEffects);
+
+  // Fetch logged-in user info
+fetch('/api/user')
+  .then(res => {
+    if (!res.ok) throw new Error('Not logged in');
+    return res.json();
+  })
+  .then(data => {
+    if (!data.success || !data.user) throw new Error('Invalid user data');
+    const user = data.user;
+
+    // Show welcome message
+    document.getElementById('welcomeText').innerHTML =
+      `Welcome, <strong>${user.username}</strong>`;
+
+    // Role-based visibility for voters only
+    if (user.role === 'voter') {
+      document.querySelectorAll('.role-voter').forEach(el => {
+        el.style.display = 'flex';
+      });
+    }
+  })
+  .catch(() => {
+    window.location.href = '/login.html';
+  });
+
+</script>
+
+
+</body>
+</html>

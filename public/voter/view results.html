@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>View Results</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+    }
+    .voter-container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      width: 95%;
+      max-width: 1000px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      color: #fff;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 30px;
+    }
+    table {
+      margin: 20px auto;
+      width: 90%;
+      color: #fff;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      color: #fff;
+      background: rgba(0,0,0,0.2);
+    }
+    .button-grid a {
+      text-decoration: none;
+    }
+    button {
+      padding: 14px 24px;
+      background-color: #fff;
+      color: #2980b9;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+      min-width: 180px;
+    }
+    button:hover {
+      background-color: #2980b9;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="voter-container">
+    <h2>View Results</h2>
+
+    <table id="results-table">
+      <thead>
+        <tr>
+          <th>Candidate</th>
+          <th>Position</th>
+          <th>Votes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Results rows will be inserted here dynamically -->
+      </tbody>
+    </table>
+
+    <div class="button-grid">
+      <a href="admin_dashboard.html"><button>Back to Dashboard</button></a>
+    </div>
+  </div>
+
+  <script>
+    // Example: Fetch results data from backend API (adjust URL as needed)
+    fetch('/api/results')
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector('#results-table tbody');
+        tbody.innerHTML = ''; // Clear existing rows
+
+        if (data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="3">No results available</td></tr>';
+          return;
+        }
+
+        data.forEach(result => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${result.candidate_name}</td>
+            <td>${result.position}</td>
+            <td>${result.votes}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      })
+      .catch(err => {
+        console.error('Error fetching results:', err);
+        const tbody = document.querySelector('#results-table tbody');
+        tbody.innerHTML = '<tr><td colspan="3">Failed to load results</td></tr>';
+      });
+  </script>
+</body>
+</html>

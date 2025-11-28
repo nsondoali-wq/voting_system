@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vote Now - Student Elections</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --primary: #3498db;
+    --primary-dark: #2980b9;
+    --secondary: #2c3e50;
+    --success: #27ae60;
+    --warning: #f39c12;
+    --danger: #e74c3c;
+    --light: #ecf0f1;
+    --dark: #34495e;
+    --gray: #95a5a6;
+    --light-gray: #f5f7fa;
+    --border-radius: 12px;
+    --box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --magic-glow: 0 0 20px rgba(52, 152, 219, 0.6);
+    --gold: linear-gradient(135deg, #FFD700, #FFA500);
+    --silver: linear-gradient(135deg, #C0C0C0, #A0A0A0);
+    --bronze: linear-gradient(135deg, #CD7F32, #8B4513);
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--dark);
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  /* Animated background */
+  .bg-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    overflow: hidden;
+  }
+  
+  .bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: float 15s infinite linear;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0) translateX(0) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.3;
+    }
+    90% {
+      opacity: 0.3;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(100px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  
+  /* Header with premium styling */
+  header {
+    background: rgba(44, 62, 80, 0.9);
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideDown 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  @keyframes slideDown {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .logo-icon {
+    font-size: 2.5rem;
+    color: #FFD700;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .logo-text {
+    text-align: left;
+  }
+  
+  header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .header-subtitle {
+    font-size: 1rem;
+    opacity: 0.8;
+    font-weight: 300;
+  }
+  
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    transition: var(--transition);
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    animation: fadeIn 0.8s ease-out 0.2s both;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .progress-container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--box-shadow);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .progress-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary), var(--success));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1s ease;
+  }
+  
+  .progress-container.animate::before {
+    transform: scaleX(1);
+  }
+  
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .progress-bar {
+    height: 10px;
+    background: rgba(236, 240, 241, 0.7);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+    position: relative;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--primary), var(--success));
+    width: 0%;
+    transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    animation: shimmer 2s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+  
+  .positions-container {
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  .position {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .position::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.5s ease;
+  }
+  
+  .position.visible::before {
+    transform: scaleY(1);
+  }
+  
+  .position:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  .position-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(236, 240, 241, 0.7);
+  }
+  
+  .position h2 {
+    color: var(--secondary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .position-icon {
+    font-size: 1.5rem;
+  }
+  
+  .position-status {
+    background: var(--light);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: var(--transition);
+  }
+  
+  .position-status.selected {
+    background: var(--success);
+    color: white;
+    box-shadow: 0 0 15px rgba(39, 174, 96, 0.5);
+    animation: pulse 2s infinite;
+  }
+  
+  .candidates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .candidate-card {
+    border: 2px solid rgba(236, 240, 241, 0.7);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(5px);
+  }
+  
+  .candidate-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(39, 174, 96, 0.05));
+    opacity: 0;
+    transition: var(--transition);
+  }
+  
+  .candidate-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .candidate-card:hover::before {
+    opacity: 1;
+  }
+  
+  .candidate-card.selected {
+    border-color: var(--success);
+    background: rgba(39, 174, 96, 0.1);
+    box-shadow: 0 0 20px rgba(39, 174, 96, 0.4);
+    animation: selectPulse 0.6s ease;
+    transform: translateY(-5px);
+  }
+  
+  @keyframes selectPulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .candidate-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+  }
+  
+  .candidate-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .candidate-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(236, 240, 241, 0.7);
+    transition: var(--transition);
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .candidate-photo::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: linear-gradient(135deg, var(--primary), var(--success)) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: var(--transition);
+  }
+  
+  .candidate-card.selected .candidate-photo {
+    border-color: var(--success);
+  }
+  
+  .candidate-card.selected .candidate-photo::after {
+    opacity: 1;
+    animation: rotate 3s linear infinite;
+  }
+  
+  .candidate-info h3 {
+    color: var(--secondary);
+    margin-bottom: 0.3rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  
+  .candidate-party {
+    font-size: 0.9rem;
+    color: var(--gray);
+    font-weight: 500;
+  }
+  
+  .candidate-tagline {
+    font-style: italic;
+    color: var(--dark);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+    padding-left: 1rem;
+    border-left: 3px solid var(--primary);
+  }
+  
+  .candidate-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .candidate-details.expanded {
+    max-height: 500px;
+  }
+  
+  .details-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary);
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    z-index: 1;
+    transition: var(--transition);
+    font-weight: 600;
+  }
+  
+  .details-toggle:hover {
+    color: var(--primary-dark);
+    transform: translateX(5px);
+  }
+  
+  .details-toggle i {
+    transition: transform 0.3s ease;
+  }
+  
+  .details-toggle.expanded i {
+    transform: rotate(180deg);
+  }
+  
+  .detail-item {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .detail-item strong {
+    color: var(--secondary);
+  }
+  
+  .platform-list {
+    padding-left: 1.2rem;
+    margin-top: 0.5rem;
+  }
+  
+  .platform-list li {
+    margin-bottom: 0.3rem;
+    position: relative;
+  }
+  
+  .platform-list li::before {
+    content: '✓';
+    position: absolute;
+    left: -1.2rem;
+    color: var(--success);
+    font-weight: bold;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+  }
+  
+  .submit-btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    padding: 1.2rem 3rem;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 1px;
+  }
+  
+  .submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.7s;
+  }
+  
+  .submit-btn:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+  }
+  
+  .submit-btn:hover::before {
+    left: 100%;
+  }
+  
+  .submit-btn:disabled {
+    background: var(--gray);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .submit-btn:disabled:hover::before {
+    left: -100%;
+  }
+  
+  .notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 400px;
+  }
+  
+  .notification {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--border-radius);
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transform: translateX(400px);
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    border-left: 4px solid var(--primary);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+  
+  .notification::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: inherit;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 3s linear;
+  }
+  
+  .notification.show::before {
+    transform: scaleX(1);
+  }
+  
+  .notification.show {
+    transform: translateX(0);
+  }
+  
+  .notification.success {
+    border-left-color: var(--success);
+  }
+  
+  .notification.error {
+    border-left-color: var(--danger);
+  }
+  
+  .notification.warning {
+    border-left-color: var(--warning);
+  }
+  
+  .notification-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    flex-shrink: 0;
+    font-size: 1rem;
+  }
+  
+  .notification.success .notification-icon {
+    background: var(--success);
+  }
+  
+  .notification.error .notification-icon {
+    background: var(--danger);
+  }
+  
+  .notification.warning .notification-icon {
+    background: var(--warning);
+  }
+  
+  .notification-content {
+    flex: 1;
+  }
+  
+  .notification-title {
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    font-size: 1.1rem;
+  }
+  
+  .notification-message {
+    font-size: 0.9rem;
+    color: var(--dark);
+  }
+  
+  .notification-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--gray);
+    transition: var(--transition);
+  }
+  
+  .notification-close:hover {
+    color: var(--dark);
+    transform: scale(1.1);
+  }
+  
+  .no-candidates {
+    text-align: center;
+    padding: 2rem;
+    color: var(--gray);
+    font-style: italic;
+  }
+  
+  /* Magic sparkle effect for selection */
+  .sparkle {
+    position: absolute;
+    pointer-events: none;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 15px 3px white;
+    opacity: 0;
+    z-index: 10;
+  }
+  
+  @keyframes sparkle {
+    0% {
+      transform: translate(0, 0) scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--tx, 0), var(--ty, 0)) scale(1);
+      opacity: 0;
+    }
+  }
+  
+  /* Medal effects for top candidates */
+  .medal {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 5;
+  }
+  
+  .medal.gold {
+    background: var(--gold);
+  }
+  
+  .medal.silver {
+    background: var(--silver);
+  }
+  
+  .medal.bronze {
+    background: var(--bronze);
+  }
+  
+  @media (max-width: 768px) {
+    .header-content {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+    
+    .logo-text {
+      text-align: center;
+    }
+    
+    .candidates-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .position-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    
+    .notification-container {
+      left: 20px;
+      right: 20px;
+      max-width: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Animated background -->
+<div class="bg-animation" id="bg-animation"></div>
+
+<header>
+  <div class="header-content">
+    <div class="logo">
+      <div class="logo-icon">🗳️</div>
+      <div class="logo-text">
+        <h1>Student Elections</h1>
+        <p class="header-subtitle">Make your voice heard! Select candidates for each position.</p>
+      </div>
+    </div>
+    <a href="voter_dashboard.html" class="nav-link">
+      <i class="fas fa-arrow-left"></i>
+      Back to Dashboard
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="progress-container" id="progress-container">
+    <div class="progress-info">
+      <span>Your voting progress:</span>
+      <span id="progress-text">0/8 positions</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+  
+  <div id="positions-container" class="positions-container">
+    <p class="info">Loading candidates...</p>
+  </div>
+  
+  <div class="actions">
+    <button id="submit-vote" class="submit-btn">
+      <i class="fas fa-paper-plane"></i> Submit Your Ballot
+    </button>
+  </div>
+</main>
+
+<div class="notification-container" id="notification-container"></div>
+
+<script>
+  // DOM Elements
+  const positionsContainer = document.getElementById('positions-container');
+  const submitBtn = document.getElementById('submit-vote');
+  const progressText = document.getElementById('progress-text');
+  const progressFill = document.getElementById('progress-fill');
+  const notificationContainer = document.getElementById('notification-container');
+  const progressContainer = document.getElementById('progress-container');
+  const bgAnimation = document.getElementById('bg-animation');
+
+  // Track selected candidates, keys = DB column names
+  const selectedVotes = {};
+
+  // Map position IDs to DB columns and display names
+  const positionMap = {
+    1: { key: 'president', name: 'President', icon: '👑' },
+    2: { key: 'vice_president', name: 'Vice-President', icon: '🤝' },
+    3: { key: 'secretary', name: 'Secretary', icon: '📝' },
+    4: { key: 'treasurer', name: 'Treasurer', icon: '💰' },
+    5: { key: 'pro', name: 'PRO', icon: '📢' },
+    6: { key: 'academic', name: 'Academic', icon: '📚' },
+    7: { key: 'welfare', name: 'Welfare', icon: '❤️' },
+    8: { key: 'sports', name: 'Sports', icon: '⚽' }
+  };
+
+  // Store candidates data globally to avoid refetching
+  let currentCandidatesData = {};
+
+  // Create animated background
+  function createBackground() {
+    const circleCount = 15;
+    for (let i = 0; i < circleCount; i++) {
+      const circle = document.createElement('div');
+      circle.classList.add('bg-circle');
+      
+      // Random size
+      const size = Math.random() * 200 + 50;
+      circle.style.width = `${size}px`;
+      circle.style.height = `${size}px`;
+      
+      // Random position
+      circle.style.left = `${Math.random() * 100}vw`;
+      circle.style.top = `${Math.random() * 100}vh`;
+      
+      // Random animation delay and duration
+      circle.style.animationDelay = `${Math.random() * 20}s`;
+      circle.style.animationDuration = `${20 + Math.random() * 20}s`;
+      
+      bgAnimation.appendChild(circle);
+    }
+  }
+
+  // Create sparkle effect
+  function createSparkleEffect(element) {
+    const rect = element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < 15; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      
+      const angle = (i / 15) * Math.PI * 2;
+      const distance = 60 + Math.random() * 40;
+      const tx = Math.cos(angle) * distance;
+      const ty = Math.sin(angle) * distance;
+      
+      sparkle.style.setProperty('--tx', `${tx}px`);
+      sparkle.style.setProperty('--ty', `${ty}px`);
+      sparkle.style.left = `${centerX}px`;
+      sparkle.style.top = `${centerY}px`;
+      
+      // Random color
+      const colors = ['#FFD700', '#FFA500', '#FFFFFF', '#3498db', '#27ae60'];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      sparkle.style.background = color;
+      sparkle.style.boxShadow = `0 0 15px 3px ${color}`;
+      
+      document.body.appendChild(sparkle);
+      
+      sparkle.style.animation = `sparkle 0.8s ease-out forwards`;
+      
+      setTimeout(() => {
+        if (sparkle.parentNode) {
+          sparkle.parentNode.removeChild(sparkle);
+        }
+      }, 800);
+    }
+  }
+
+  // Create confetti effect
+  function createConfettiEffect() {
+    const colors = ['#FFD700', '#FFA500', '#3498db', '#27ae60', '#e74c3c', '#9b59b6'];
+    
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.style.position = 'fixed';
+      confetti.style.width = '10px';
+      confetti.style.height = '10px';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.borderRadius = '50%';
+      confetti.style.top = '-10px';
+      confetti.style.left = `${Math.random() * 100}vw`;
+      confetti.style.zIndex = '9999';
+      confetti.style.opacity = '0';
+      
+      document.body.appendChild(confetti);
+      
+      // Animate confetti
+      const animation = confetti.animate([
+        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+        { transform: `translateY(${window.innerHeight}px) rotate(${360 + Math.random() * 360}deg)`, opacity: 0 }
+      ], {
+        duration: 2000 + Math.random() * 2000,
+        easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+      });
+      
+      animation.onfinish = () => {
+        if (confetti.parentNode) {
+          confetti.parentNode.removeChild(confetti);
+        }
+      };
+    }
+  }
+
+  // Notification Model
+  class Notification {
+    constructor(title, message, type = 'info', duration = 5000) {
+      this.id = Date.now() + Math.random();
+      this.title = title;
+      this.message = message;
+      this.type = type;
+      this.duration = duration;
+      this.element = null;
+    }
+
+    show() {
+      // Create notification element
+      const notificationEl = document.createElement('div');
+      notificationEl.className = `notification ${this.type}`;
+      notificationEl.id = `notification-${this.id}`;
+      
+      // Determine icon based on type
+      let icon = 'i';
+      if (this.type === 'success') icon = '✓';
+      else if (this.type === 'error') icon = '✕';
+      else if (this.type === 'warning') icon = '!';
+      
+      notificationEl.innerHTML = `
+        <div class="notification-icon">${icon}</div>
+        <div class="notification-content">
+          <div class="notification-title">${this.title}</div>
+          <div class="notification-message">${this.message}</div>
+        </div>
+        <button class="notification-close">&times;</button>
+      `;
+      
+      // Add to container
+      notificationContainer.appendChild(notificationEl);
+      this.element = notificationEl;
+      
+      // Add close event
+      const closeBtn = notificationEl.querySelector('.notification-close');
+      closeBtn.addEventListener('click', () => this.hide());
+      
+      // Show with animation
+      setTimeout(() => {
+        notificationEl.classList.add('show');
+      }, 10);
+      
+      // Auto hide after duration
+      if (this.duration > 0) {
+        this.timeoutId = setTimeout(() => this.hide(), this.duration);
+      }
+    }
+
+    hide() {
+      if (this.timeoutId) {
+        clearTimeout(this.timeoutId);
+      }
+      
+      if (this.element) {
+        this.element.classList.remove('show');
+        setTimeout(() => {
+          if (this.element && this.element.parentNode) {
+            this.element.parentNode.removeChild(this.element);
+          }
+        }, 300);
+      }
+    }
+  }
+
+  // Notification Manager
+  const NotificationManager = {
+    show: function(title, message, type = 'info', duration = 5000) {
+      const notification = new Notification(title, message, type, duration);
+      notification.show();
+      return notification;
+    }
+  };
+
+  // Update progress indicator
+  function updateProgress() {
+    const totalPositions = Object.keys(positionMap).length;
+    const selectedCount = Object.keys(selectedVotes).length;
+    const percentage = (selectedCount / totalPositions) * 100;
+    
+    progressText.textContent = `${selectedCount}/${totalPositions} positions`;
+    progressFill.style.width = `${percentage}%`;
+    
+    // Animate progress container
+    progressContainer.classList.add('animate');
+    
+    // Update submit button state
+    submitBtn.disabled = selectedCount === 0;
+  }
+
+  // Fetch candidates from public API
+  async function fetchCandidates() {
+    try {
+      const res = await fetch('/api/candidates-public');
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message || 'Failed to load candidates');
+      return data.data;
+    } catch (err) {
+      console.error('Fetch candidates error:', err);
+      NotificationManager.show(
+        'Error Loading Candidates', 
+        'Failed to load candidates. Please try again later.', 
+        'error'
+      );
+      return {};
+    }
+  }
+
+  // Render candidates per position
+  function renderPositions(candidatesByPosition) {
+    if (!candidatesByPosition || Object.keys(candidatesByPosition).length === 0) {
+      positionsContainer.innerHTML = `<div class="no-candidates">No candidates available at this time.</div>`;
+      return;
+    }
+
+    positionsContainer.innerHTML = '';
+
+    Object.entries(candidatesByPosition).forEach(([positionId, candidates], index) => {
+      const pos = positionMap[positionId] || { 
+        key: `position_${positionId}`, 
+        name: `Position ${positionId}`,
+        icon: '📊'
+      };
+      
+      const isSelected = selectedVotes.hasOwnProperty(pos.key);
+      
+      const positionDiv = document.createElement('div');
+      positionDiv.classList.add('position');
+
+      positionDiv.innerHTML = `
+        <div class="position-header">
+          <h2><span class="position-icon">${pos.icon}</span> ${pos.name}</h2>
+          <div class="position-status ${isSelected ? 'selected' : ''}">
+            ${isSelected ? 'Selected' : 'Not Selected'}
+          </div>
+        </div>
+        <div class="candidates-grid" id="position-${positionId}">
+          ${!candidates || candidates.length === 0 
+            ? `<div class="no-candidates">No candidates for this position.</div>` 
+            : ''}
+        </div>
+      `;
+
+      positionsContainer.appendChild(positionDiv);
+      
+      // Add animation delay for staggered entrance
+      setTimeout(() => {
+        positionDiv.classList.add('visible');
+      }, index * 150);
+      
+      // Add candidates if available
+      if (candidates && candidates.length > 0) {
+        const candidatesGrid = document.getElementById(`position-${positionId}`);
+        
+        candidates.forEach((cand, candIndex) => {
+          const isCandidateSelected = selectedVotes[pos.key] === cand.id;
+          
+          const candDiv = document.createElement('div');
+          candDiv.classList.add('candidate-card');
+          if (isCandidateSelected) candDiv.classList.add('selected');
+          
+          // Add medal for top 3 candidates (based on ID for demo)
+          let medalHTML = '';
+          if (candIndex < 3) {
+            const medalTypes = ['gold', 'silver', 'bronze'];
+            const medalIcons = ['🥇', '🥈', '🥉'];
+            medalHTML = `<div class="medal ${medalTypes[candIndex]}">${medalIcons[candIndex]}</div>`;
+          }
+          
+          candDiv.innerHTML = `
+            ${medalHTML}
+            <input type="radio" name="position-${positionId}" value="${cand.id}" 
+                   ${isCandidateSelected ? 'checked' : ''}>
+            <div class="candidate-header">
+              <img src="${cand.photo || '/uploads/default.jpg'}" alt="${cand.name}" class="candidate-photo">
+              <div class="candidate-info">
+                <h3>${cand.name}</h3>
+                <div class="candidate-party">${cand.party || 'Independent'}</div>
+              </div>
+            </div>
+            <div class="candidate-tagline">${cand.tagline || 'No tagline provided'}</div>
+            <div class="candidate-details" id="details-${positionId}-${cand.id}">
+              <div class="detail-item"><strong>Background:</strong> ${cand.background || 'Not specified'}</div>
+              <div class="detail-item"><strong>Experience:</strong> ${cand.experience || 'Not specified'}</div>
+              ${cand.platform && cand.platform.length > 0 
+                ? `<div class="detail-item">
+                    <strong>Platform:</strong>
+                    <ul class="platform-list">
+                      ${cand.platform.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                   </div>` 
+                : ''}
+            </div>
+            <div class="details-toggle" id="toggle-${positionId}-${cand.id}">
+              <span>View Details</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          `;
+
+          candidatesGrid.appendChild(candDiv);
+          
+          // Add animation delay for staggered entrance
+          setTimeout(() => {
+            candDiv.style.opacity = '1';
+            candDiv.style.transform = 'translateY(0)';
+          }, (index * 150) + (candIndex * 100));
+          
+          // Add event listeners
+          const radioInput = candDiv.querySelector('input[type="radio"]');
+          radioInput.addEventListener('change', () => selectCandidate(pos.key, cand.id, candDiv));
+          
+          const detailsToggle = candDiv.querySelector('.details-toggle');
+          detailsToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleDetails(`details-${positionId}-${cand.id}`, `toggle-${positionId}-${cand.id}`);
+          });
+          
+          // Click anywhere on card to select
+          candDiv.addEventListener('click', (e) => {
+            if (e.target !== detailsToggle && !detailsToggle.contains(e.target)) {
+              radioInput.checked = true;
+              selectCandidate(pos.key, cand.id, candDiv);
+            }
+          });
+        });
+      }
+    });
+    
+    updateProgress();
+  }
+
+  function toggleDetails(detailsId, toggleId) {
+    const detailsElem = document.getElementById(detailsId);
+    const toggleElem = document.getElementById(toggleId);
+    
+    if (detailsElem && toggleElem) {
+      const isExpanded = detailsElem.classList.contains('expanded');
+      
+      if (isExpanded) {
+        detailsElem.classList.remove('expanded');
+        toggleElem.classList.remove('expanded');
+        toggleElem.querySelector('span').textContent = 'View Details';
+      } else {
+        detailsElem.classList.add('expanded');
+        toggleElem.classList.add('expanded');
+        toggleElem.querySelector('span').textContent = 'Hide Details';
+      }
+    }
+  }
+
+  function selectCandidate(columnName, candidateId, element) {
+    selectedVotes[columnName] = candidateId;
+    
+    // Create sparkle effect
+    if (element) {
+      createSparkleEffect(element);
+    }
+    
+    // Update UI to reflect selection without refetching data
+    renderPositions(currentCandidatesData);
+    
+    // Find position name for notification
+    const positionName = Object.values(positionMap).find(pos => pos.key === columnName)?.name || columnName;
+    
+    NotificationManager.show(
+      'Selection Updated', 
+      `You've selected a candidate for ${positionName}.`, 
+      'success', 
+      3000
+    );
+    
+    updateProgress();
+  }
+
+  function confirmVote() {
+    return new Promise((resolve) => {
+      // Create modal overlay
+      const overlay = document.createElement('div');
+      overlay.style.position = 'fixed';
+      overlay.style.top = 0;
+      overlay.style.left = 0;
+      overlay.style.width = '100%';
+      overlay.style.height = '100%';
+      overlay.style.background = 'rgba(0,0,0,0.7)';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.zIndex = 9999;
+      overlay.style.backdropFilter = 'blur(10px)';
+
+      // Create modal box
+      const modal = document.createElement('div');
+      modal.style.background = 'rgba(255, 255, 255, 0.95)';
+      modal.style.padding = '2.5rem';
+      modal.style.borderRadius = '20px';
+      modal.style.boxShadow = '0 20px 50px rgba(0,0,0,0.5)';
+      modal.style.textAlign = 'center';
+      modal.style.maxWidth = '500px';
+      modal.style.width = '90%';
+      modal.style.animation = 'fadeIn 0.4s ease-out';
+      modal.style.backdropFilter = 'blur(10px)';
+      modal.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+      modal.innerHTML = `
+        <div style="font-size:4rem; margin-bottom:1rem;">🗳️</div>
+        <h2 style="margin-bottom:1rem;color:var(--secondary);font-size:1.8rem;">Confirm Your Vote</h2>
+        <p style="margin-bottom:2rem;font-size:1.1rem;line-height:1.5;">Are you sure you want to cast this vote? Once submitted, you cannot change your selections.</p>
+        <div style="display:flex;justify-content:center;gap:1.5rem;">
+          <button id="confirm-yes" style="padding:1rem 2rem;background:var(--success);color:white;border:none;border-radius:50px;cursor:pointer;font-weight:600;transition:var(--transition);font-size:1.1rem;box-shadow:0 5px 15px rgba(39, 174, 96, 0.4);">
+            <i class="fas fa-check"></i> Yes, Submit
+          </button>
+          <button id="confirm-no" style="padding:1rem 2rem;background:var(--danger);color:white;border:none;border-radius:50px;cursor:pointer;font-weight:600;transition:var(--transition);font-size:1.1rem;box-shadow:0 5px 15px rgba(231, 76, 60, 0.4);">
+            <i class="fas fa-times"></i> Cancel
+          </button>
+        </div>
+      `;
+
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+
+      const yesBtn = document.getElementById('confirm-yes');
+      const noBtn = document.getElementById('confirm-no');
+
+      yesBtn.addEventListener('click', () => {
+        document.body.removeChild(overlay);
+        resolve(true);
+      });
+
+      noBtn.addEventListener('click', () => {
+        document.body.removeChild(overlay);
+        resolve(false);
+      });
+
+      // Add hover effects
+      [yesBtn, noBtn].forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+          btn.style.transform = 'translateY(-3px)';
+          btn.style.boxShadow = '0 8px 20px rgba(0,0,0,0.3)';
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = 'translateY(0)';
+          btn.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
+        });
+      });
+    });
+  }
+
+  async function submitVote() {
+    if (Object.keys(selectedVotes).length === 0) {
+      NotificationManager.show(
+        'No Selections', 
+        'Please select at least one candidate before submitting your ballot.', 
+        'warning'
+      );
+      return;
+    }
+
+    // Ask for confirmation first
+    const confirmed = await confirmVote();
+    if (!confirmed) return; // User canceled
+
+    try {
+      const res = await fetch('/api/submit-vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ votes: selectedVotes })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        // Create celebration effects
+        createConfettiEffect();
+        createSparkleEffect(submitBtn);
+        
+        NotificationManager.show(
+          'Vote Submitted Successfully', 
+          data.message || 'Your vote has been recorded. Redirecting...', 
+          'success',
+          3000
+        );
+        
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> Vote Submitted';
+
+        // Clear selections and update progress
+        Object.keys(selectedVotes).forEach(key => delete selectedVotes[key]);
+        updateProgress();
+
+        // Redirect after short delay
+        setTimeout(() => {
+          window.location.href = 'voter_dashboard.html';
+        }, 2000);
+
+      } else {
+        throw new Error(data.message || 'Failed to submit vote');
+      }
+    } catch (err) {
+      console.error('Vote submit error:', err);
+      NotificationManager.show(
+        'Vote Submission Failed', 
+        err.message || 'An error occurred while submitting your vote. Please try again.', 
+        'error'
+      );
+    }
+  }
+
+  submitBtn.addEventListener('click', submitVote);
+
+  async function init() {
+    // Create background animation
+    createBackground();
+    
+    // Load candidates data
+    currentCandidatesData = await fetchCandidates();
+    renderPositions(currentCandidatesData);
+  }
+
+  init();
+</script>
+
+</body>
+</html>

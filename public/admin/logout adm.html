@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Candidates</title>
+  <style>
+    /* Same CSS as provided — keep consistent across pages */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+    }
+    .voter-container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      width: 95%;
+      max-width: 1000px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      color: #fff;
+      text-align: center;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    button {
+      padding: 14px 24px;
+      background-color: #fff;
+      color: #2980b9;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+      min-width: 180px;
+    }
+    button:hover {
+      background-color: #2980b9;
+      color: #fff;
+    }
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin: 10px 5px;
+      width: 200px;
+    }
+    table {
+      margin: 20px auto;
+      width: 90%;
+      color: #fff;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .button-grid a {
+      text-decoration: none;
+    }
+  </style>
+  <!-- Same head and styles -->
+<body>
+  <div class="voter-container">
+    <h2>Logout</h2>
+    <p>You have been logged out.</p>
+
+    <div class="button-grid">
+      <a href="login.php"><button>Go to Login</button></a>
+    </div>
+  </div>
+</body>

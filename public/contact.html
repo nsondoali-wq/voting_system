@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Contact - Digital Voting System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-image: url('/images/election-.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px 30px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .top-nav {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-nav li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            font-size: 14px;
+        }
+
+        .top-nav li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+        }
+
+        .content {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            max-width: 700px;
+            width: 100%;
+            max-height: 78vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #222;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .contact-info div {
+            background-color: #f7f7f7;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+        }
+
+        .contact-info a {
+            color: #2c3e50;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            padding: 8px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                max-height: none;
+                overflow-y: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ✅ Header Navigation -->
+    <header>
+        <ul class="top-nav">
+            <li><a href="Home.html">Home</a></li>
+            <li><a href="about Us .html">About Us</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+    </header>
+
+    <!-- ✅ Main Content -->
+    <div class="main-wrapper">
+        <div class="content">
+            <h1>Contact Us</h1>
+            <div class="contact-info">
+                <div>
+                    <strong>Email:</strong>
+                    <a href="mailto:nsondoali@gmail.com">nsondoali@gmail.com</a>
+                </div>
+                <div><strong>Phone:</strong> 0965278754 / 0977360672</div>
+                <div><strong>Location:</strong> Chelstone Extension</div>
+                <div><strong>Hours:</strong> Mon – Fri, 8:30 AM – 5:30 PM</div> 
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Footer -->
+    <footer>
+        &copy; 2025 Digital Voting System. All rights reserved.
+    </footer>
+
+</body>
+</html>

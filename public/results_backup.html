@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Results - Digital Voting System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #9b59b6;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Header with improved navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--secondary);
+            font-size: 1.8rem;
+        }
+
+        .top-nav {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .top-nav li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top-nav li a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .top-nav li a:hover::before {
+            left: 100%;
+        }
+
+        .top-nav li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Main content section */
+        .main-content {
+            padding: 120px 40px 80px;
+            background: var(--light);
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 50px;
+            color: var(--dark);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        /* Election info cards */
+        .election-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            width: 250px;
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .info-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .info-card h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .info-card p {
+            color: var(--dark);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Winner announcement */
+        .winner-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 60px 40px;
+            margin: 50px 0;
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+            box-shadow: var(--shadow);
+            animation: fadeIn 1s ease-out 0.5s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .winner-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s infinite;
+        }
+
+        .winner-badge {
+            background: gold;
+            color: var(--dark);
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        .winner-name {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .winner-position {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .winner-votes {
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px;
+        }
+
+        /* Results table */
+        .results-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 50px auto;
+            max-width: 1000px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 1s ease-out 0.7s both;
+        }
+
+        .results-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .results-table tr {
+            border-bottom: 1px solid #eee;
+            transition: var(--transition);
+        }
+
+        .results-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .results-table td {
+            padding: 15px;
+        }
+
+        .candidate-name {
+            font-weight: 600;
+        }
+
+        .vote-bar-container {
+            width: 100%;
+            background: #eee;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+        }
+
+        .vote-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1.5s ease-out;
+        }
+
+        /* Charts section */
+        .charts-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 50px 0;
+            flex-wrap: wrap;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 1s ease-out 0.9s both;
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--light);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+            }
+            
+            .top-nav {
+                margin-top: 15px;
+                gap: 15px;
+            }
+            
+            .main-content {
+                padding: 100px 20px 60px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .election-info {
+                gap: 20px;
+            }
+            
+            .info-card {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .winner-section {
+                padding: 40px 20px;
+            }
+            
+            .winner-name {
+                font-size: 2rem;
+            }
+            
+            .results-container {
+                padding: 20px;
+                overflow-x: auto;
+            }
+            
+            .charts-container {
+                gap: 20px;
+            }
+            
+            .chart-card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-nav {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .winner-name {
+                font-size: 1.8rem;
+            }
+            
+            .results-table {
+                font-size: 0.9rem;
+            }
+            
+            .results-table th, .results-table td {
+                padding: 10px 5px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            header, footer, .winner-badge {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 20px 0;
+            }
+            
+            .winner-section {
+                background: white;
+                color: black;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <a href="index.html" class="logo">
+            <i class="fas fa-vote-yea"></i>
+            <span>Digital Voting</span>
+        </a>
+        <ul class="top-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="results.html" class="active">Results</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="section-title">Election Results 2023</h1>
+        <p class="section-subtitle">Official results for the Student Council Elections. Thank you to all who participated in making your voice heard!</p>
+        
+        <!-- Election Info Cards -->
+        <div class="election-info">
+            <div class="info-card">
+                <i class="fas fa-users"></i>
+                <h3>Total Voters</h3>
+                <p id="total-voters">1,247</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-vote-yea"></i>
+                <h3>Votes Cast</h3>
+                <p id="votes-cast">1,103</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-percentage"></i>
+                <h3>Turnout</h3>
+                <p id="turnout-rate">88.5%</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-clock"></i>
+                <h3>Election Status</h3>
+                <p id="election-status">Finalized</p>
+            </div>
+        </div>
+
+        <!-- Winner Announcement -->
+        <div class="winner-section">
+            <div class="winner-badge">
+                <i class="fas fa-trophy"></i> WINNER
+            </div>
+            <h2 class="winner-name">Sarah Johnson</h2>
+            <p class="winner-position">Student Council President</p>
+            <p class="winner-votes">612 Votes (55.5%)</p>
+        </div>
+
+        <!-- Results Table -->
+        <div class="results-container">
+            <h2 class="results-title">Presidential Election Results</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Candidate</th>
+                        <th>Position</th>
+                        <th>Votes</th>
+                        <th>Percentage</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="candidate-name">Sarah Johnson</td>
+                        <td>President</td>
+                        <td>612</td>
+                        <td>55.5%</td>
+                        <td>
+                            <div class="vote-bar-container">
+                                <div class="vote-bar" style="width: 55.5%; background-color: #3498db;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="candidate-name">Michael Chen</td>
+                        <td>President</td>
+                        <td>491</td>
+                        <td>44.5%</td>
+                        <td>
+                            <div class="vote-bar-container">
+                                <div class="vote-bar" style="width: 44.5%; background-color: #2ecc71;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-container">
+            <div class="chart-card">
+                <h3 class="chart-title">Vote Distribution</h3>
+                <div class="chart-container">
+                    <canvas id="votesChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3 class="chart-title">Voter Turnout by Department</h3>
+                <div class="chart-container">
+                    <canvas id="turnoutChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Results Tables for Other Positions -->
+        <div class="results-container">
+            <h2 class="results-title">Vice Presidential Election Results</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Candidate</th>
+                        <th>Position</th>
+                        <th>Votes</th>
+                        <th>Percentage</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="candidate-name">Alex Rodriguez</td>
+                        <td>Vice President</td>
+                        <td>698</td>
+                        <td>63.3%</td>
+                        <td>
+                            <div class="vote-bar-container">
+                                <div class="vote-bar" style="width: 63.3%; background-color: #9b59b6;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="candidate-name">Jessica Williams</td>
+                        <td>Vice President</td>
+                        <td>405</td>
+                        <td>36.7%</td>
+                        <td>
+                            <div class="vote-bar-container">
+                                <div class="vote-bar" style="width: 36.7%; background-color: #f39c12;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="results.html">Results</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+            <p class="copyright">&copy; 2023 Digital Voting System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate vote bars
+            document.querySelectorAll('.vote-bar').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+
+            // Charts
+            const votesCtx = document.getElementById('votesChart').getContext('2d');
+            const votesChart = new Chart(votesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Sarah Johnson', 'Michael Chen'],
+                    datasets: [{
+                        data: [612, 491],
+                        backgroundColor: ['#3498db', '#2ecc71'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw} votes (${((context.raw/1103)*100).toFixed(1)}%)`;
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+
+            const turnoutCtx = document.getElementById('turnoutChart').getContext('2d');
+            const turnoutChart = new Chart(turnoutCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Engineering', 'Business', 'Arts', 'Sciences', 'Medicine'],
+                    datasets: [{
+                        label: 'Voter Turnout (%)',
+                        data: [92, 85, 78, 88, 95],
+                        backgroundColor: '#9b59b6',
+                        borderColor: '#8e44ad',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+
+            // Header scroll effect
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                if (window.scrollY > 50) {
+                    header.style.background = "rgba(44, 62, 80, 0.98)";
+                    header.style.padding = "15px 40px";
+                } else {
+                    header.style.background = "rgba(44, 62, 80, 0.95)";
+                    header.style.padding = "20px 40px";
+                }
+            });
+
+            // Add print functionality
+            const printButton = document.createElement('button');
+            printButton.innerHTML = '<i class="fas fa-print"></i> Print Results';
+            printButton.style.cssText = `
+                display: block;
+                margin: 30px auto;
+                padding: 12px 25px;
+                background: var(--primary);
+                color: white;
+                border: none;
+                border-radius: 50px;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: var(--transition);
+            `;
+            printButton.addEventListener('mouseenter', function() {
+                this.style.background = var(--secondary);
+                this.style.transform = 'translateY(-2px)';
+            });
+            printButton.addEventListener('mouseleave', function() {
+                this.style.background = var(--primary);
+                this.style.transform = 'translateY(0)';
+            });
+            printButton.addEventListener('click', function() {
+                window.print();
+            });
+            
+            document.querySelector('.main-content').appendChild(printButton);
+        });
+    </script>
+</body>
+</html>

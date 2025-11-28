@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+    }
+
+    .voter-container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      width: 95%;
+      max-width: 1000px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      color: #fff;
+      text-align: center;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 25px;
+      font-size: 1.1rem;
+    }
+
+    .button-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px;
+      background-color: #fff;
+      color: #2980b9;
+      border-radius: 10px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      min-width: 180px;
+      font-size: 1rem;
+    }
+
+    .btn i {
+      font-size: 1.2rem;
+    }
+
+    .btn:hover {
+      background-color: #2980b9;
+      color: #fff;
+    }
+
+    .btn:hover i {
+      color: #fff;
+    }
+
+    /* Responsive adjustments for small screens */
+    @media (max-width: 600px) {
+      .btn {
+        min-width: 100%;
+        font-size: 1rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="voter-container" role="main" aria-label="Admin Dashboard">
+    <h2>Admin Dashboard</h2>
+    <p>Welcome, <strong>Admin</strong>! You are managing the <em>2025 Elections</em>.</p>
+
+    <div class="button-grid">
+      <a href="manage_voters.php" class="btn" aria-label="Manage voter records">
+        <i class="fas fa-users" aria-hidden="true"></i> Manage Voters
+      </a>
+      <a href="manage_candidates.php" class="btn" aria-label="Manage candidate profiles">
+        <i class="fas fa-user-edit" aria-hidden="true"></i> Manage Candidates
+      </a>
+      <a href="view_results.php" class="btn" aria-label="View election results">
+        <i class="fas fa-poll" aria-hidden="true"></i> View Results
+      </a>
+      <a href="system_settings.php" class="btn" aria-label="Adjust system configuration">
+        <i class="fas fa-cog" aria-hidden="true"></i> System Settings
+      </a>
+      <a href="logout.php" class="btn" aria-label="Log out from admin panel">
+        <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout
+      </a>
+    </div>
+  </div>
+</body>
+</html>

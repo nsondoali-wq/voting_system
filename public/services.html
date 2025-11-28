@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Services - Digital Voting System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-image: url('/images/election-.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px 30px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .top-nav {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-nav li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            font-size: 14px;
+        }
+
+        .top-nav li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+        }
+
+        .content {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            max-width: 750px;
+            width: 100%;
+            max-height: 78vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .service-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px 25px;
+            font-size: 13.5px;
+            line-height: 1.4;
+        }
+
+        .service-item {
+            background-color: #f7f7f7;
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .service-item strong {
+            color: #2c3e50;
+        }
+
+        footer {
+            padding: 8px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .service-list {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                max-height: none;
+                overflow-y: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <ul class="top-nav">
+            <li><a href="Home.html">Home</a></li>
+            <li><a href="about Us .html">About Us</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </header>
+
+    <div class="main-wrapper">
+        <div class="content">
+            <h1>Our Services</h1>
+            <div class="service-list">
+                <div class="service-item">
+                    <strong>Voter Registration</strong><br>
+                    Secure online registration for eligible voters.
+                </div>
+                <div class="service-item">
+                    <strong>Online Voting</strong><br>
+                    Vote from anywhere using any device.
+                </div>
+                <div class="service-item">
+                    <strong>Real-Time Results</strong><br>
+                    Get instant, transparent election results.
+                </div>
+                <div class="service-item">
+                    <strong>Admin Dashboard</strong><br>
+                    Manage elections, users, and candidates easily.
+                </div>
+                <div class="service-item">
+                    <strong>Security & Privacy</strong><br>
+                    All data encrypted and votes kept anonymous.
+                </div>
+                <div class="service-item">
+                    <strong>Mobile-Friendly</strong><br>
+                    Designed to work smoothly on any device.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Digital Voting System. All rights reserved.
+    </footer>
+
+</body>
+</html>
