@@ -1,19 +1,20 @@
-// config/db.js
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'voting_user',        // same as in server.js
-    password: 'MySecurePassword123',
-    database: 'voting_system'
-});
+async function initDb() {
+  try {
+    const connection = await mysql.createConnection({
+      host: 'sql8.freesqldatabase.com',
+      user: 'sql8809783',
+      password: 'QYHIdBK6ll',
+      database: 'sql8809783',
+      port: 3306
+    });
+    console.log('DB connected successfully!');
+    return connection;
+  } catch (error) {
+    console.error('DB connection failed:', error);
+    process.exit(1); // stop server if DB fails
+  }
+}
 
-db.connect((err) => {
-    if (err) {
-        console.error('DB connection failed:', err.stack);
-        return;
-    }
-    console.log('Connected to database from db.js.');
-});
-
-module.exports = db;
+initDb();
