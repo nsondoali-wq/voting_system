@@ -1,20 +1,20 @@
-const mysql = require('mysql2/promise');
+// config/db.js
+const { Pool } = require('pg');
+require("dotenv").config();
 
-async function initDb() {
-  try {
-    const connection = await mysql.createConnection({
-      host: 'sql8.freesqldatabase.com',
-      user: 'sql8809783',
-      password: 'QYHIdBK6ll',
-      database: 'sql8809783',
-      port: 3306
-    });
-    console.log('DB connected successfully!');
-    return connection;
-  } catch (error) {
-    console.error('DB connection failed:', error);
-    process.exit(1); // stop server if DB fails
-  }
-}
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: false // using internal Render DB
+});
 
-initDb();
+// Test connection
+pool.connect((err, client, release) => {
+    if (err) {
+        console.error("PostgreSQL connection error:", err.stack);
+    } else {
+        console.log("Connected to PostgreSQL (Render internal).");
+        release();
+    }
+});
+
+module.exports = pool;
