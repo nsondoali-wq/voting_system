@@ -1,4 +1,10 @@
-PORT=3000
-SESSION_SECRET=mysecretkey
+# Render PostgreSQL credentials
+DB_HOST=dpg-d4kl4f24d50c73divqgg-a.oregon-postgres.render.com
+DB_PORT=5432
+DB_USER=voting_db_3m9h_user
+DB_PASS=pE65mdfecwOiC8hZVoX72hN2eHeVGDqX
+DB_NAME=voting_db_3m9h
 
-DATABASE_URL=postgresql://voting_db_3m9h_user:pE65mdfecwOiC8hZVoX72hN2eHeVGDqX@dpg-d4kl4f24d50c73divqgg-a/voting_db_3m9h
+# App settings
+PORT=3000
+SESSION_SECRET=ChangeThisToAStrongSecret
