@@ -1,5 +1,4 @@
-DB_HOST=sql8.freesqldatabase.com
-DB_USER=sql8809783
-DB_PASSWORD=<your-db-password>
-DB_NAME=sql8809783
-DB_PORT=3306
+PORT=3000
+SESSION_SECRET=mysecretkey
+
+DATABASE_URL=postgresql://voting_db_3m9h_user:pE65mdfecwOiC8hZVoX72hN2eHeVGDqX@dpg-d4kl4f24d50c73divqgg-a/voting_db_3m9h
