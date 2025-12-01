@@ -16,7 +16,6 @@ const port = process.env.PORT || 3000;
 // -------------------- Middleware --------------------
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 app.use(express.static(path.join(__dirname, "public")));
 
 // Ensure uploads folder exists
@@ -30,17 +29,20 @@ app.use(
     secret: process.env.SESSION_SECRET || "voting_secret_key_change_this",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 2 * 60 * 60 * 1000 },
+    cookie: { maxAge: 2 * 60 * 60 * 1000 }, // 2 hours
   })
 );
 
-// -------------------- PostgreSQL Pool --------------------
+// -------------------- PostgreSQL Pool (SSL enabled) --------------------
 const pool = new Pool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
+  port: process.env.DB_PORT || 5432,
+  ssl: {
+    rejectUnauthorized: false, // Required for Render PostgreSQL
+  },
 });
 
 // Test connection
