@@ -622,31 +622,35 @@
                     gender: document.getElementById('gender').value
                 };
 
-                fetch('http://localhost:3000/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                })
-                .then(res => res.json())
-                .then(data => {
-                    submitButton.classList.remove('loading');
-                    submitButton.disabled = false;
-                    if (data.success) {
-                        successMessage.style.display = 'block';
-                        registerForm.style.display = 'none';
-                        setTimeout(() => { window.location.href = 'login.html'; }, 3000);
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    submitButton.classList.remove('loading');
-                    submitButton.disabled = false;
-                    alert('Something went wrong. Please try again.');
-                });
-            }
-        });
+          fetch('https://e-voting-system-99bv.onrender.com/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData)
+})
+.then(res => res.json())
+.then(data => {
+    submitButton.classList.remove('loading');
+    submitButton.disabled = false;
+
+    if (data.success) {
+        successMessage.style.display = 'block';
+        registerForm.style.display = 'none';
+
+        setTimeout(() => { 
+            window.location.href = 'login.html'; 
+        }, 3000);
+
+    } else {
+        alert(data.message);
+    }
+})
+.catch(err => {
+    console.error(err);
+    submitButton.classList.remove('loading');
+    submitButton.disabled = false;
+    alert('Something went wrong. Please try again.');
+});
+
 
         formControls.forEach(control => {
             control.addEventListener('input', function() { this.classList.remove('error'); });
